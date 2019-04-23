@@ -25,7 +25,3 @@ django-debug-toolbar==1.11  # https://github.com/jazzband/django-debug-toolbar
 django-extensions==2.1.6  # https://github.com/django-extensions/django-extensions
 django-coverage-plugin==1.6.0  # https://github.com/nedbat/django_coverage_plugin
 pytest-django==3.4.8  # https://github.com/pytest-dev/pytest-django
-
-pymysql==0.9.3
-django-mysql==2.4.1
-mysqlclient==1.4.2.post1
