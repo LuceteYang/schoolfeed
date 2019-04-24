@@ -30,11 +30,11 @@ class Schools(GenericAPIView):
         
         user = request.user
 
-        schools = models.Schools.objects.all()
+        schools = models.School.objects.all()
 
-        # serializer = serializers.ImageSerializer(images, many=True, context={'request': request})
+        serializer = serializers.SchoolListSerializer(schools, many=True)
 
-        return Response(data=schools)
+        return Response(data=serializer.data)
 
         # ## 임시로 다뿌리는걸로 변경
 
@@ -65,7 +65,7 @@ class Schools(GenericAPIView):
 
         user = request.user  
 
-        serializer = serializers.SchoolDetailSerializer(data=request.data)
+        serializer = serializers.SchoolsSerializer(data=request.data)
         if serializer.is_valid():
             school = models.School.objects.create(
                 name=request.data.get('name'),
@@ -136,7 +136,7 @@ class SchoolDetail(GenericAPIView):
 
             serializer.save(school=school)
 
-            return Response(data=serializer.data, status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
         else:
 

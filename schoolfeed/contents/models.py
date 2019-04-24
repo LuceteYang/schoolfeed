@@ -16,3 +16,10 @@ class Contents(school_models.TimeStampedModel):
 
 	def __str__(self):
 		return self.text
+
+	def save(self, *args, **kwargs):	
+		if self.pk:
+			contents = Contents.objects.get(pk=self.pk)
+			if Contents.main_image != self.main_image:
+				contents.main_image.delete(save=False)
+		super(Contents, self).save(*args, **kwargs)

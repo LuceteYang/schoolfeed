@@ -19,8 +19,24 @@ class SchoolDetailSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = models.School
 		fields = (
+			'id',
 			'name',
 			'image',
 			'location',
 			'contents',
+		)
+
+class SchoolListSerializer(serializers.ModelSerializer):
+
+	name = serializers.CharField(required=False)
+	image = serializers.FileField(required=False)
+	location = serializers.CharField(required=False)
+
+	class Meta:
+		model = models.School
+		fields = (
+			'id',
+			'name',
+			'image',
+			'location',
 		)
