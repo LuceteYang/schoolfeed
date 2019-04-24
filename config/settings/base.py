@@ -285,6 +285,10 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+JWT_AUTH = {
+    'JWT_VERIFY_EXPIRATION': False
+}
+
 # rest auth custom serializers 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'schoolfeed.users.serializers.SignUpSerializer'

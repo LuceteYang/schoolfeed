@@ -5,6 +5,28 @@ from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from . import models
 
+class UserProfileSerializer(serializers.ModelSerializer):
+
+    username = serializers.ReadOnlyField()
+    name = serializers.CharField(required=False)
+    class Meta:
+        model = models.User
+        fields = (
+            'profile_image',
+            'username',
+            'name'
+        )
+
+class ListUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.User
+        fields = (
+            'profile_image',
+            'name',
+        )
+
+
 class SignUpSerializer(RegisterSerializer):
 
     name = serializers.CharField(required=True, write_only=True)
@@ -26,16 +48,5 @@ class SignUpSerializer(RegisterSerializer):
         user.save()
         return user
 
-class UserProfileSerializer(serializers.ModelSerializer):
-
-    username = serializers.ReadOnlyField()
-    name = serializers.CharField(required=False)
-    class Meta:
-        model = models.User
-        fields = (
-            'profile_image',
-            'username',
-            'name'
-        )
 class CustomLoginSerializer(LoginSerializer):
     email = serializers.EmailField(read_only=True)

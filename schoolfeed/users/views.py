@@ -24,6 +24,7 @@ class UserProfile(GenericAPIView):
     """
     serializer_class = serializers.UserProfileSerializer
     parser_classes = (FormParser, MultiPartParser)
+
     def get(self, request, format=None):
         
         serializer = serializers.UserProfileSerializer(request.user, context={'request': request})

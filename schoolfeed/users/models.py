@@ -10,7 +10,7 @@ class User(AbstractUser):
     # around the globe.
     name = models.CharField(_("Name of User"), max_length=255)
     profile_image = models.ImageField(null=True,blank=True)
-    email = models.EmailField(_('email address'),null=True, blank=True)
+    email = models.EmailField(_('email address'),null=True)
 
     def save(self, *args, **kwargs):
         if self.pk:
