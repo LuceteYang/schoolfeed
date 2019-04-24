@@ -34,7 +34,7 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-l10n
 USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
-USE_TZ = True
+USE_TZ = False
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ DJANGO_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "django.contrib.humanize", # Handy template tags
+    "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
 ]
 THIRD_PARTY_APPS = [
@@ -89,6 +89,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'rest_auth',  # rest auth
     'rest_auth.registration',  # enable registration
+    'drf_yasg', # Automated generation of real Swagger
 ]
 LOCAL_APPS = [
     "schoolfeed.users.apps.UsersAppConfig",
@@ -114,9 +115,9 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+# LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "account_login"
+# LOGIN_URL = "account_login"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -145,6 +146,7 @@ AUTH_PASSWORD_VALIDATORS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -268,6 +270,12 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
+
 }
 
 REST_USE_JWT = True
@@ -276,4 +284,23 @@ ACCOUTN_LOGOUT_ON_GET = True
 SOCIALACCOUNT_QUERY_EMAIL = True
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# rest auth custom serializers 
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'schoolfeed.users.serializers.SignUpSerializer'
+}
+REST_AUTH_SERIALIZERS = {
+    'LOGIN_SERIALIZER':'schoolfeed.users.serializers.CustomLoginSerializer',
+    'USER_DETAILS_SERIALIZER': 'schoolfeed.users.serializers.UserProfileSerializer'
+}
+# swagger security apikey header parameter
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+   }
+}
 

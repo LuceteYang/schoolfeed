@@ -2,6 +2,6 @@ from django.urls import path
 
 from . import views
 
-app_name = "yangram"
+app_name = "contents"
 urlpatterns = [
 ]

@@ -25,3 +25,6 @@ mysqlclient==1.4.2.post1
 djangorestframework-jwt==1.11.0
 django-rest-auth==0.9.3
 django-cors-headers==2.4.0
+
+# swagger
+drf-yasg==1.15.0

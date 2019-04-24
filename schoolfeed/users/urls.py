@@ -3,5 +3,5 @@ from . import views
 
 app_name = "users"
 urlpatterns = [
-    # path("", view=user_list_view, name="list"),
+	path("", view=views.UserProfile.as_view(), name="user_info"),
 ]

@@ -5,14 +5,42 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
+# drf_yasg
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+# drf_yasg setting
+schema_view = get_schema_view(
+   openapi.Info(
+      title="SchoolFeed API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="jae6120@naver.com"),
+      license=openapi.License(name="Yang"),
+   ),
+   validators=['flex'],
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
-    # User management
-    path('rest-auth/', include('rest_auth.urls')),
+    # rest-auth login, registration
+    path('rest-auth/', include(("rest_auth.urls","rest_framework"),namespace="rest_framework")),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path("users/", include("schoolfeed.users.urls", namespace="users")),
-    path("schools/", include("schoolfeed.schools.urls", namespace="schools")),
-    path("contents/", include("schoolfeed.contents.urls", namespace="contents")),
+    # User management
+    path('users/', include("schoolfeed.users.urls")),
+    # School management
+    path('schools/', include("schoolfeed.schools.urls")),
+    # Content management
+    path('contents/', include("schoolfeed.contents.urls")),
+    
+    # drf_yasg Swagger
+    path('swagger<str:format>', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
