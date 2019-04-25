@@ -89,6 +89,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'rest_auth',  # rest auth
     'rest_auth.registration',  # enable registration
+    'corsheaders', # To accept requests from React
     'drf_yasg', # Automated generation of real Swagger
 ]
 LOCAL_APPS = [
@@ -161,7 +162,10 @@ STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [str(APPS_DIR.path("static"))]
+STATICFILES_DIRS = [
+    str(APPS_DIR.path("static")),
+    str(ROOT_DIR.path('frontend','build','static')),
+]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
