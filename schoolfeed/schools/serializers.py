@@ -40,3 +40,7 @@ class SchoolListSerializer(serializers.ModelSerializer):
 			'image',
 			'location',
 		)
+
+class ContentsQuerySerializer(serializers.Serializer):
+    last_contents_id = serializers.IntegerField(help_text="this field is generated from a query_serializer", required=True)
+    

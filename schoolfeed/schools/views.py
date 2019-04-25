@@ -8,8 +8,13 @@ from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from . import models, serializers
 from rest_framework.parsers import FormParser, MultiPartParser
 from schoolfeed.users import models as user_models
+from schoolfeed.contents import models as contents_models
 from schoolfeed.users import serializers as user_serializers
+from schoolfeed.contents import serializers as contents_serializers
 from django.db.models.functions import Now
+
+from drf_yasg.utils import swagger_auto_schema
+
 
 # Create your views here.
 class Schools(GenericAPIView):
@@ -35,31 +40,6 @@ class Schools(GenericAPIView):
         serializer = serializers.SchoolListSerializer(schools, many=True)
 
         return Response(data=serializer.data)
-
-        # ## 임시로 다뿌리는걸로 변경
-
-        # following_users = user.following.all()
-
-        # image_list = []
-
-        # for following_user in following_users:
-        # 	user_images = following_user.images.all()[:2]
-
-        # 	for image in user_images:
-        # 		image_list.append(image)
-
-        # my_images = user.images.all()[:2]
-
-        # for image in my_images:
-
-        #     image_list.append(image)
-
-        # sorted_list = sorted(image_list, key=lambda x: x.created_at, reverse=True)
-
-
-        # serializer = serializers.ImageSerializer(sorted_list, many=True, context={'request': request})
-
-        # return Response(data=serializer.data)
 
     def post(self, request, format=None):
 
@@ -213,3 +193,25 @@ class UnSubscribeSchool(APIView):
 
             return Response(status=status.HTTP_304_NOT_MODIFIED)
 
+
+class ContentsSchool(APIView):
+
+    @swagger_auto_schema(
+        query_serializer=serializers.ContentsQuerySerializer
+    )
+    def get(self, request, school_id, format=None):
+        try:
+            last_contents_id = int(request.GET.get('last_contents_id'))
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        field_value_pairs = [('school__id', school_id),('deleted_at__isnull', True)]
+        if last_contents_id>0:
+            field_value_pairs.append(('id__lt', last_contents_id))
+        filter_options = {k:v for k,v in field_value_pairs if v}
+        contents =  contents_models.Contents.objects.filter(
+                                    **filter_options
+                                ).order_by('-id')[:10]
+        serializer = contents_serializers.ContentsSerializer(contents, many=True)
+        return Response(data=serializer.data)
+
+        

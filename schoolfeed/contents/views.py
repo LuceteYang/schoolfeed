@@ -6,14 +6,16 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from schoolfeed.schools import models as schools_models
 from django.db.models.functions import Now
 
+from drf_yasg.utils import swagger_auto_schema
+
 # Create your views here.
 class Contents(GenericAPIView):
 	"""
-		컨텐츠 리스트와 생성하는 API
+		구독한 학교 컨텐츠 리스트와 생성하는 API
 
 		---
 		# 내용
-			- id : 컨텐츠 아이
+			- id : 컨텐츠 아이디
 			- school : 학교
 			- creator : 컨텐츠 작성자
 			- main_image : 컨텐츠 사진
@@ -22,11 +24,23 @@ class Contents(GenericAPIView):
 	serializer_class = serializers.InputContentsSerializer
 	parser_classes = (FormParser, MultiPartParser)
 
+	@swagger_auto_schema(
+		query_serializer=serializers.ContentsQuerySerializer
+	)
 	def get(self, request, format=None):
-		
+		try:
+			last_contents_id = int(request.GET.get('last_contents_id'))
+		except:
+			return Response(status=status.HTTP_400_BAD_REQUEST)
 		user = request.user
-
-		contents = models.Contents.objects.all()
+		subscibed_schools_ids = schools_models.Subscribe.objects.filter(subscriber=user.id).values('school')
+		field_value_pairs = [('school__id__in', subscibed_schools_ids),('deleted_at__isnull', True)]
+		if last_contents_id>0:
+			field_value_pairs.append(('id__lt', last_contents_id))
+		filter_options = {k:v for k,v in field_value_pairs if v}
+		contents =  models.Contents.objects.filter(
+									**filter_options
+								).order_by('-id')[:10]
 		serializer = serializers.ContentsSerializer(contents, many=True)
 		return Response(data=serializer.data)
 
