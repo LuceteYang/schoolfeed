@@ -9,6 +9,11 @@ const Navigation = (props, context) => (
     <div className={styles.inner}>
       <div className={styles.column}>
         <Link to="/">
+          <img
+            src={require("images/logo.png")}
+            className={styles.logo}
+            alt="Logo"
+          />
         </Link>
       </div>
       <div className={styles.column}>
@@ -24,13 +29,13 @@ const Navigation = (props, context) => (
       </div>
       <div className={styles.column}>
         <div className={styles.navIcon}>
-          <Link to="/explore">
-            <Ionicon icon="ios-compass-outline" fontSize="28px" color="black" />
+          <Link to="/feed">
+            <Ionicon icon="ios-calendar-outline" fontSize="28px" color="black" />
           </Link>
         </div>
         <div className={styles.navIcon}>
-          <Link to="/chat">
-            <Ionicon icon="ios-chatbubbles-outline" fontSize="28px" color="black" />
+          <Link to="/school">
+            <Ionicon icon="ios-school-outline" fontSize="28px" color="black" />
           </Link>
         </div>
         <div className={styles.navIcon}>

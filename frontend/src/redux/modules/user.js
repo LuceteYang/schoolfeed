@@ -5,9 +5,6 @@
 // actions
 const SAVE_TOKEN = "SAVE_TOKEN";
 const LOGOUT = "LOGOUT";
-const SET_USER_LIST = "SET_USER_LIST";
-const FOLLOW_USER = "FOLLOW_USER";
-const UNFOLLOW_USER = "UNFOLLOW_USER";
 const SET_EXPLORE = "SET_EXPLORE";
 const SET_IMAGE_LIST = "SET_IMAGE_LIST";
 const SET_AUTH_ERROR = "SET_AUTH_ERROR";
@@ -33,33 +30,7 @@ function logout() {
     type: LOGOUT
   };
 }
-function setFollowUser(userId) {
-  return {
-    type: FOLLOW_USER,
-    userId
-  };
-}
 
-function setUnfollowUser(userId) {
-  return {
-    type: UNFOLLOW_USER,
-    userId
-  };
-}
-
-function setUserList(userList) {
-  return {
-    type: SET_USER_LIST,
-    userList
-  };
-}
-
-function setExplore(userList) {
-  return {
-    type: SET_EXPLORE,
-    userList
-  };
-}
 
 function setImageList(imageList) {
   return {
@@ -69,28 +40,7 @@ function setImageList(imageList) {
 }
 
 
-// API actions
-function facebookLogin(access_token) {
-	//dispatch, fetch react-thunk임
-  return dispatch => {
-    fetch("/users/login/facebook/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        access_token
-      })
-    })
-      .then(response => response.json())
-      .then(json => {
-        if (json.token) {
-          dispatch(saveToken(json.token));
-        }
-      })
-      .catch(err => console.log(err));
-  };
-}
+
 
 function usernameLogin(username, password) {
 	//dispatch, fetch react-thunk임
@@ -143,135 +93,6 @@ function createAccount(username, password, email, name) {
       })
   }
 }
-function getPhotoLikes(photoId) {
-  return (dispatch, getState) => {
-    const { user: { token } } = getState();
-    fetch(`/images/${photoId}/likes/`, {
-      headers: {
-        Authorization: `JWT ${token}`
-      }
-    })
-      .then(response => {
-        if (response.status === 401) {
-          dispatch(logout());
-        }
-        return response.json();
-      })
-      .then(json => {
-        dispatch(setUserList(json));
-      });
-  };
-}
-
-function followUser(userId) {
-  return (dispatch, getState) => {
-    dispatch(setFollowUser(userId));
-    const { user: { token } } = getState();
-    fetch(`/users/${userId}/follow/`, {
-      method: "POST",
-      headers: {
-        Authorization: `JWT ${token}`,
-        "Content-Type": "application/json"
-      }
-    }).then(response => {
-      if (response.status === 401) {
-        dispatch(logout());
-      } else if (!response.ok) {
-        dispatch(setUnfollowUser(userId));
-      }
-    });
-  };
-}
-
-function unfollowUser(userId) {
-  return (dispatch, getState) => {
-    dispatch(setUnfollowUser(userId));
-    const { user: { token } } = getState();
-    fetch(`/users/${userId}/unfollow/`, {
-      method: "POST",
-      headers: {
-        Authorization: `JWT ${token}`,
-        "Content-Type": "application/json"
-      }
-    }).then(response => {
-      if (response.status === 401) {
-        dispatch(logout());
-      } else if (!response.ok) {
-        dispatch(setFollowUser(userId));
-      }
-    });
-  };
-}
-
-function getExplore() {
-  return (dispatch, getState) => {
-    const { user: { token } } = getState();
-    fetch("/users/explore/", {
-      headers: {
-        Authorization: `JWT ${token}`,
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => {
-        if (response.status === 401) {
-          dispatch(logout());
-        }
-        return response.json();
-      })
-      .then(json => dispatch(setExplore(json)));
-  };
-}
-function searchByTerm(searchTerm) {
-  return async (dispatch, getState) => {
-    const { user: { token } } = getState();
-    const userList = await searchUsers(token, searchTerm);
-    const imageList = await searchImages(token, searchTerm);
-    if (userList === 401 || imageList === 401) {
-      dispatch(logout());
-    }
-    dispatch(setUserList(userList));
-    dispatch(setImageList(imageList));
-  };
-}
-function searchByUsernameUsers(searchTerm) {
-  return async (dispatch, getState) => {
-    const { user: { token } } = getState();
-    const userList = await searchUsers(token, searchTerm);
-    dispatch(setUserList(userList));
-  };
-}
-
-function searchUsers(token, searchTerm) {
-  return fetch(`/users/search/?username=${searchTerm}`, {
-    headers: {
-      Authorization: `JWT ${token}`,
-      "Content-Type": "application/json"
-    }
-  })
-    .then(response => {
-      if (response.status === 401) {
-        return 401;
-      }
-      return response.json();
-    })
-    .then(json => json);
-}
-
-function searchImages(token, searchTerm) {
-  return fetch(`/images/search/?hashtags=${searchTerm}`, {
-    headers: {
-      Authorization: `JWT ${token}`,
-      "Content-Type": "application/json"
-    }
-  })
-    .then(response => {
-      if (response.status === 401) {
-        return 401;
-      }
-      return response.json();
-    })
-    .then(json => json);
-}
 
 // action creators
 
@@ -279,8 +100,7 @@ function searchImages(token, searchTerm) {
 // initial state
 const initialState = {
 	  isLoggedIn: localStorage.getItem("jwt") ? true : false,
-    token: localStorage.getItem("jwt"),
-    userList:[]
+    token: localStorage.getItem("jwt")
 }
 
 // reducer
@@ -291,16 +111,6 @@ function reducer(state = initialState, action){
   		return applySetToken(state, action);
     case LOGOUT:
       return applyLogout(state, action);
-    case SET_USER_LIST:
-      return applySetUserList(state, action);
-    case FOLLOW_USER:
-      return applyFollowUser(state, action);
-    case UNFOLLOW_USER:
-      return applyUnfollowUser(state, action);
-    case SET_EXPLORE:
-      return applySetExplore(state, action);
-    case SET_IMAGE_LIST:
-      return applySetImageList(state, action);
     case SET_AUTH_ERROR:
       return applySetAuthError(state, action);
 		default:
@@ -326,56 +136,6 @@ function applyLogout(state, action) {
   };
 }
 
-function applySetUserList(state, action) {
-  const { userList } = action;
-  return {
-    ...state,
-    userList: userList
-  };
-}
-
-function applyFollowUser(state, action) {
-  const { userId } = action;
-  const { userList } = state;
-  const updatedUserList = userList.map(user => {
-    if (user.id === userId) {
-      return { ...user, following: true };
-    }
-    return user;
-  });
-  return {
-    ...state,
-    userList: updatedUserList
-  };
-}
-
-function applyUnfollowUser(state, action) {
-  const { userId } = action;
-  const { userList } = state;
-  const updatedUserList = userList.map(user => {
-    if (user.id === userId) {
-      return { ...user, following: false };
-    }
-    return user;
-  });
-  return { ...state, userList: updatedUserList };
-}
-
-function applySetExplore(state, action) {
-  const { userList } = action;
-  return {
-    ...state,
-    userList
-  };
-}
-function applySetImageList(state, action) {
-  const { imageList } = action;
-  return {
-    ...state,
-    imageList
-  };
-}
-
 function applySetAuthError(state, action){
   const { preload } = action;
   return {
@@ -387,16 +147,9 @@ function applySetAuthError(state, action){
 
 // exports
 const actionCreators = {
-  facebookLogin,
   usernameLogin,
   createAccount,
-  logout,
-  getPhotoLikes,
-  followUser,
-  unfollowUser,
-  getExplore,
-  searchByTerm,
-  searchByUsernameUsers
+  logout
 };
 
 export { actionCreators };

@@ -30,6 +30,7 @@ class ContentsSerializer(serializers.ModelSerializer):
 			'main_image',
 			'text',
 			'school',
+			'natural_time'
 			) 
 
 class InputContentsSerializer(serializers.ModelSerializer):

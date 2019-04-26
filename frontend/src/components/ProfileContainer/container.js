@@ -30,7 +30,7 @@ class Container extends Component {
 	      	[name]: value
 	    });
 	  };
-	  _handleSubmit = event => {
+  	_handleSubmit = event => {
 	    const { password, email, name } = this.state;
 	    event.preventDefault();
 	    if(password && password.length<8){

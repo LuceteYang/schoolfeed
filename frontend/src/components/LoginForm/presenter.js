@@ -5,10 +5,6 @@ import formStyles from "shared/formStyles.module.scss";
 
 const LoginForm = (props, context) => (
   <div className={formStyles.formComponent}>
-    <h3 className={formStyles.signupHeader}>
-      스쿨피드에 가입해서 친구들과 <br/>소식을 공유해보아요.
-    </h3>
-    <span className={formStyles.divider}></span>
     <form className={formStyles.form} onSubmit={props.handleSubmit}>
       <input
         type="text"

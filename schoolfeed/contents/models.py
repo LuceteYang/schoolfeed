@@ -1,6 +1,7 @@
 from django.db import models
 from schoolfeed.users import models as user_models
 from schoolfeed.schools import models as school_models
+from django.contrib.humanize.templatetags.humanize import naturaltime
 
 # Create your models here.
 class Contents(school_models.TimeStampedModel):
@@ -10,7 +11,10 @@ class Contents(school_models.TimeStampedModel):
 	main_image = models.ImageField(null=True)
 	text = models.TextField(null=True, blank=True)
 	deleted_at = models.DateTimeField(null=True)
-	
+
+	@property
+	def natural_time(self):
+		return naturaltime(self.created_at)	
 	class Meta:
 		ordering = ['-created_at']
 
