@@ -45,7 +45,6 @@ const SignupForm = (props, context) => (
         type="submit"
         value="가입하기"
         className={formStyles.button}
-        onChange={props.handleInputChange}
       />
     </form>
     <span style={{display: props.errorMessage ? 'block':'none'}} className={formStyles.errorMessage}>{props.errorMessage}</span>

@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import styles from "./styles.module.scss";
 import Auth from "components/Auth";
 import Navigation from "components/Navigation";
+import ProfileContainer from "components/ProfileContainer";
 
 
 const App = props => (
@@ -19,6 +20,7 @@ App.propTypes = {
 
 const PrivateRoutes = props => (
   <Switch>
+  	<Route path="/profile" component={ProfileContainer} />
   </Switch>
 );
 

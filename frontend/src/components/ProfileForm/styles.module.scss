@@ -1,0 +1,49 @@
+.form-component {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+  .image-upload{
+    .image{
+      cursor: pointer;
+      width: 100px;
+      height: 100px;
+    }
+    .file-input{
+        display: none;
+    }
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    input[type="submit"] {
+      margin-top: 10px;
+    }
+    .text-input {
+      border: 1px solid #efefef;
+      border-radius: 3px;
+      background-color: $bg-color;
+      margin-bottom: 7px;
+      font-size: $normal-font-size;
+      padding: 9px 0 7px 8px;
+      font-weight: 400;
+      &:focus {
+        outline: none;
+        border: 1px solid #b2b2b2;
+      }
+    }
+  }
+  .button {
+    @include blueButton();
+    svg {
+      margin-right: 10px;
+    }
+  }
+  .error-message {
+    margin: 10px;
+    font-size: $normal-font-size;
+    color: $red-color;
+  }
+}

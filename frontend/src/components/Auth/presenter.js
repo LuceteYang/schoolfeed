@@ -6,11 +6,11 @@ import SignupForm from "components/SignupForm";
 
 const Auth = (props, context) => (
   <main className={styles.auth}>
-    <div>
+    <div className={styles.column}>
       <img
         src={require("images/nicole-honeywill-1465559-unsplash-min.jpg")}
         alt="Welcome To SchoolFeed"
-        style = {{width:"500px"}}
+        style = {{width:"500px",padding:"1px",border: "1px solid #e6e6e6"}}
       />
     </div>
     <div className={styles.column}>

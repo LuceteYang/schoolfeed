@@ -6,9 +6,6 @@ class Container extends Component {
   state = {
     term: ""
   };
-  static propTypes = {
-    goToSearch: PropTypes.func.isRequired
-  };
   render() {
     const { term } = this.state;
     return (
@@ -26,13 +23,8 @@ class Container extends Component {
     });
   };
   _onSubmit = event => {
-    const { goToSearch } = this.props;
     const { term } = this.state;
     event.preventDefault();
-    goToSearch(term);
-    this.setState({
-      term: ""
-    });
   };
 }
 

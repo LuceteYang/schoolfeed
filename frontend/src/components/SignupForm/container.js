@@ -33,7 +33,6 @@ class Container extends Component {
         handleInputChange={this._handleInputChange}
         handleSubmit={this._handleSubmit}
         errorMessage={errorMessage}
-        handleFacebookLogin={this._handleFacebookLogin}
       />
     );
   }
@@ -54,13 +53,13 @@ class Container extends Component {
     }
     if(!password){
        this.setState({
-        errorMessage: "비밀번호는 6자 이상 12자 이하로 입력해 주세요."
+        errorMessage: "비밀번호는 8자 이상 12자 이하로 입력해 주세요."
       });
        return
     }
     if(password.length<8){
       this.setState({
-        errorMessage: "비밀번호는 6자 이상 12자 이하로 입력해 주세요."
+        errorMessage: "비밀번호는 8자 이상 12자 이하로 입력해 주세요."
       });
       return
     }

@@ -7,14 +7,12 @@ from . import models
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
-    username = serializers.ReadOnlyField()
-    name = serializers.CharField(required=False)
     class Meta:
         model = models.User
         fields = (
             'profile_image',
-            'username',
-            'name'
+            'name',
+            'email',
         )
 
 class ListUserSerializer(serializers.ModelSerializer):

@@ -48,8 +48,5 @@ Navigation.propTypes = {
   onSubmit: PropTypes.func.isRequired
 };
 
-Navigation.contextTypes = {
-  t: PropTypes.func.isRequired
-};
 
 export default Navigation;
