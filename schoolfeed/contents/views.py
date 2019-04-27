@@ -40,7 +40,7 @@ class Contents(GenericAPIView):
 		filter_options = {k:v for k,v in field_value_pairs}
 		contents =  models.Contents.objects.filter(
 									**filter_options
-								).order_by('-id')[:10]
+								).order_by('-id')[:3]
 		serializer = serializers.ContentsSerializer(contents, many=True)
 		return Response(data=serializer.data)
 

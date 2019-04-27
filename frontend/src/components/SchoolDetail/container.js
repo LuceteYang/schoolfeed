@@ -17,9 +17,8 @@ class Container extends Component {
   }
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
-    console.log(this.props)
     const { getSchoolDetail } = this.props;
-	getSchoolDetail();
+    getSchoolDetail();
   }
   componentWillUnmount() {
     window.removeEventListener("scroll", this.handleScroll);

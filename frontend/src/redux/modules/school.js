@@ -153,7 +153,7 @@ function getSchoolDetail(schoolId) {
 function getSchoolContents(schoolId, lastContentsId) {
   return (dispatch, getState) => {
     const { user: { token } } = getState();
-    fetch(`/schools/${schoolId}/${lastContentsId}`, {
+    fetch(`/schools/${schoolId}/contents/?last_contents_id=${lastContentsId}`, {
       headers: {
         Authorization: `JWT ${token}`,
         "Content-Type": "application/json"
@@ -278,8 +278,11 @@ function applySetSchoolDetail(state, action) {
 function applySetSchoolContents(state, action){
   const { schoolContents } = action;
   const { schoolDetail } = state;
-   schoolDetail.contents = schoolDetail.contents.concat(schoolContents)
-  return { ...state, schoolDetail };
+  const updatedSchoolDetail = {
+    ...schoolDetail,
+    contents:schoolDetail.contents.concat(schoolContents)
+  }
+  return { ...state, schoolDetail:{...updatedSchoolDetail} };
 }
 
 
