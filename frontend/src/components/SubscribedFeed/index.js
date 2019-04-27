@@ -1,9 +1,9 @@
 import { connect } from "react-redux";
-import { actionCreators as contentsActions } from "redux/modules/contents";
+import { actionCreators as userActions } from "redux/modules/user";
 import Container from "./container";
 
 const mapStateToProps = (state, ownProps) => {
-  const { contents: { subscribedFeed } } = state;
+  const { user: { subscribedFeed } } = state;
   return {
     subscribedFeed
   };
@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     getSubscribedFeed: (last_contents_id) => {
-      dispatch(contentsActions.getSubscribedFeed(last_contents_id));
+      dispatch(userActions.getSubscribedFeed(last_contents_id));
     }
   };
 };

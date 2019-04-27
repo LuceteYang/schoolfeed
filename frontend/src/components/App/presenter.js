@@ -4,7 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import styles from "./styles.module.scss";
 import Auth from "components/Auth";
 import SubscribedFeed from "components/SubscribedFeed";
-import School from "components/School";
+import SubscribedSchool from "components/SubscribedSchool";
 import Navigation from "components/Navigation";
 import ProfileContainer from "components/ProfileContainer";
 
@@ -24,7 +24,7 @@ const PrivateRoutes = props => (
   <Switch>
     <Route exact path="/" component={SubscribedFeed} />
     <Route path="/feed" component={SubscribedFeed} />
-    <Route path="/school" component={School} />
+    <Route path="/school" component={SubscribedSchool} />
   	<Route path="/profile" component={ProfileContainer} />
   </Switch>
 );

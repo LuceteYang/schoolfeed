@@ -34,10 +34,10 @@ class Contents(GenericAPIView):
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 		user = request.user
 		subscibed_schools_ids = schools_models.Subscribe.objects.filter(subscriber=user.id).values('school')
-		field_value_pairs = [('school__id__in', subscibed_schools_ids),('deleted_at__isnull', True)]
+		field_value_pairs = [('school__in', subscibed_schools_ids),('deleted_at__isnull', True)]
 		if last_contents_id>0:
 			field_value_pairs.append(('id__lt', last_contents_id))
-		filter_options = {k:v for k,v in field_value_pairs if v}
+		filter_options = {k:v for k,v in field_value_pairs}
 		contents =  models.Contents.objects.filter(
 									**filter_options
 								).order_by('-id')[:10]

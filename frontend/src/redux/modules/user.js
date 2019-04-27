@@ -8,6 +8,7 @@ const LOGOUT = "LOGOUT";
 const SET_EXPLORE = "SET_EXPLORE";
 const SET_IMAGE_LIST = "SET_IMAGE_LIST";
 const SET_AUTH_ERROR = "SET_AUTH_ERROR";
+const SET_SUBSCRIBED_FEED = "SET_SUBSCRIBED_FEED";
 
 // action crators
 
@@ -36,6 +37,14 @@ function setImageList(imageList) {
   return {
     type: SET_IMAGE_LIST,
     imageList
+  };
+}
+
+function setSubscribedFeed(last_contents_id,newSubscribedFeed) {
+  return {
+    type: SET_SUBSCRIBED_FEED,
+    newSubscribedFeed,
+    last_contents_id
   };
 }
 
@@ -93,6 +102,24 @@ function createAccount(username, password, email, name) {
       })
   }
 }
+function getSubscribedFeed(last_contents_id) {
+  return (dispatch, getState) => {
+    const { user: { token } } = getState();
+    fetch(`/contents/?last_contents_id=${last_contents_id}`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (response.status === 401) {
+          dispatch(logout());
+        }
+        return response.json();
+      })
+      .then(json => dispatch(setSubscribedFeed(last_contents_id,json)));
+  };
+}
 
 // action creators
 
@@ -113,6 +140,8 @@ function reducer(state = initialState, action){
       return applyLogout(state, action);
     case SET_AUTH_ERROR:
       return applySetAuthError(state, action);
+    case SET_SUBSCRIBED_FEED:
+      return applySetSubscribedFeed(state, action);
 		default:
 			return state;
 	}
@@ -130,8 +159,9 @@ function applySetToken(state, action) {
 }
 function applyLogout(state, action) {
   localStorage.removeItem("jwt");
+  const updatedState = delete state['subscribedFeed']
   return {
-    ...state,
+    ...updatedState,
     isLoggedIn: false
   };
 }
@@ -144,12 +174,28 @@ function applySetAuthError(state, action){
   }
 }
 
+function applySetSubscribedFeed(state, action) {
+  const { newSubscribedFeed, last_contents_id } = action;
+  const { subscribedFeed } = state;
+  let updatedUserList;
+  if(last_contents_id == 0 ){
+    updatedUserList = newSubscribedFeed;
+  }else{
+    updatedUserList = subscribedFeed.concat(newSubscribedFeed)
+  }
+  return {
+    ...state,
+    subscribedFeed: updatedUserList
+  };
+}
+
 
 // exports
 const actionCreators = {
   usernameLogin,
   createAccount,
-  logout
+  logout,
+  getSubscribedFeed
 };
 
 export { actionCreators };
