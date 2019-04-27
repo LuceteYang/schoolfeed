@@ -215,7 +215,7 @@ function applySetSubscribedSchool(state, action) {
 
 function applySubscribeSchool(state, action) {
   const { schoolId } = action;
-  const { subscribedSchool, searchSchool, schoolDetail } = state;
+  const { searchSchool, schoolDetail } = state;
   let result = {}
   if (schoolDetail){
     // schoolDetail.is_subscribed = true

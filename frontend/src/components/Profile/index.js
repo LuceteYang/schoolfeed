@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./styles.module.scss";
-import ProfileForm from "components/ProfileForm";
 
 const Profile = (props, context) => (
   <div className={styles.formComponent}>

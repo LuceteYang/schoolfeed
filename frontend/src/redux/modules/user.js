@@ -5,8 +5,6 @@
 // actions
 const SAVE_TOKEN = "SAVE_TOKEN";
 const LOGOUT = "LOGOUT";
-const SET_EXPLORE = "SET_EXPLORE";
-const SET_IMAGE_LIST = "SET_IMAGE_LIST";
 const SET_AUTH_ERROR = "SET_AUTH_ERROR";
 const SET_SUBSCRIBED_FEED = "SET_SUBSCRIBED_FEED";
 
@@ -33,13 +31,6 @@ function logout() {
   };
 }
 
-
-function setImageList(imageList) {
-  return {
-    type: SET_IMAGE_LIST,
-    imageList
-  };
-}
 
 function setSubscribedFeed(last_contents_id,newSubscribedFeed) {
   return {

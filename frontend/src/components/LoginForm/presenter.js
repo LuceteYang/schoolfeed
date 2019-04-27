@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Ionicon from "react-ionicons";
 import formStyles from "shared/formStyles.module.scss";
 
 const LoginForm = (props, context) => (

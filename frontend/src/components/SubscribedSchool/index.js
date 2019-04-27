@@ -10,7 +10,6 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  const { page } = ownProps;
   return {
     getSubscribedSchool: (page) => {
       dispatch(schoolActions.getSubscribedSchool(page));

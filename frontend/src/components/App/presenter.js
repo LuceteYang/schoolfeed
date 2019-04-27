@@ -27,7 +27,9 @@ const PrivateRoutes = props => (
     <Route exact path="/" component={SubscribedFeed} />
     <Route path="/feed" component={SubscribedFeed} />
     <Route exact path="/school" component={SubscribedSchool} />
-    <Route path="/school/:schoolId" component={SchoolDetail} />
+    <Route path="/school/new" component={SubscribedSchool} />
+    <Route exact path="/school/:schoolId" component={SchoolDetail} />
+    <Route path="/school/:schoolId/edit" component={SchoolDetail} />
     <Route path="/search/:searchTerm" component={Search} />
   	<Route path="/profile" component={ProfileContainer} />
   </Switch>
