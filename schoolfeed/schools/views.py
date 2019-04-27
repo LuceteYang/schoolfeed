@@ -15,6 +15,8 @@ from django.db.models.functions import Now
 
 from drf_yasg.utils import swagger_auto_schema
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 
 # Create your views here.
 class Schools(GenericAPIView):
@@ -31,14 +33,31 @@ class Schools(GenericAPIView):
     serializer_class = serializers.SchoolsSerializer
     parser_classes = (FormParser, MultiPartParser)
 
+    @swagger_auto_schema(
+        query_serializer=serializers.PageQuerySerializer
+    )
     def get(self, request, format=None):
-        
+
         user = request.user
 
-        schools = models.School.objects.all()
+        subscibed_schools_ids = models.Subscribe.objects.filter(subscriber=user.id).values('school')
+        school_list =  models.School.objects.filter(
+                                    id__in=subscibed_schools_ids,
+                                    deleted_at__isnull=True
+                                )
 
-        serializer = serializers.SchoolListSerializer(schools, many=True)
+        paginator = Paginator(school_list, 20) # Show 20 contacts per page
 
+        page = request.GET.get('page')
+        try:
+            schools = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            schools = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            schools = []
+        serializer = serializers.SchoolListSerializer(schools, many=True, context={'request': request})
         return Response(data=serializer.data)
 
     def post(self, request, format=None):
@@ -67,6 +86,34 @@ class Schools(GenericAPIView):
 
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Search(APIView):
+    """
+        학교 검색
+        
+        ---
+        # 내용
+            - id : 학교 아이디
+            - name : 학교 이름
+            - image : 학교 이미지
+            - location : 학교 장소
+            - is_subscribed : 구독여부
+    """
+    serializer_class = serializers.SchoolsSerializer
+    @swagger_auto_schema(
+        query_serializer=serializers.SearchQuerySerializer
+    )
+    def get(self, request, format=None):
+        school_name = request.query_params.get('school_name',None)
+        if school_name is None:
+            print(school_name)
+            schools = []
+        else:    
+            schools = models.School.objects.filter(name__contains=school_name, deleted_at__isnull=True)
+
+        serializer = serializers.SchoolListSerializer(schools, many=True, context={'request': request})
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 class SchoolDetail(GenericAPIView):
     """

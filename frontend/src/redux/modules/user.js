@@ -10,6 +10,7 @@ const SET_IMAGE_LIST = "SET_IMAGE_LIST";
 const SET_AUTH_ERROR = "SET_AUTH_ERROR";
 const SET_SUBSCRIBED_FEED = "SET_SUBSCRIBED_FEED";
 
+
 // action crators
 
 function saveAuthError(preload) {
@@ -121,6 +122,8 @@ function getSubscribedFeed(last_contents_id) {
   };
 }
 
+
+
 // action creators
 
 
@@ -159,9 +162,10 @@ function applySetToken(state, action) {
 }
 function applyLogout(state, action) {
   localStorage.removeItem("jwt");
-  const updatedState = delete state['subscribedFeed']
+  // 유저 관련 정보 삭
+  delete state['subscribedFeed']
   return {
-    ...updatedState,
+    ...state,
     isLoggedIn: false
   };
 }

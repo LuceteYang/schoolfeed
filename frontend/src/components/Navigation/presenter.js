@@ -20,7 +20,7 @@ const Navigation = (props, context) => (
         <form method="post" onSubmit={props.onSubmit}>
           <input
             type="text"
-            placeholder="Search"
+            placeholder="학교 검색"
             className={styles.searchInput}
             value={props.value}
             onChange={props.onInputChange}

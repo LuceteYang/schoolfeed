@@ -3,17 +3,17 @@ import { actionCreators as schoolActions } from "redux/modules/school";
 import Container from "./container";
 
 const mapStateToProps = (state, ownProps) => {
-  const { school: { subscribedSchool } } = state;
+  const { school: { searchSchool } } = state;
   return {
-    subscribedSchool
+    searchSchool,
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  const { page } = ownProps;
+const { match: { params: { searchTerm } } } = ownProps;
   return {
-    getSubscribedSchool: (page) => {
-      dispatch(schoolActions.getSubscribedSchool(page));
+    getSearchSchool: () => {
+      dispatch(schoolActions.getSearchSchool(searchTerm));
     }
   };
 };

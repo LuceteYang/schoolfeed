@@ -4,20 +4,20 @@ import styles from "./styles.module.scss";
 import Loading from "components/Loading";
 import SchoolDisplay from "components/SchoolDisplay";
 
-const SubscribedSchool = (props, context) => {
+const Search = (props, context) => {
   return (
     <div className={styles.school}>
       <div className={styles.section}>
-        <h4 className={styles.title}>구독중인 학교</h4>
+        <h4 className={styles.title}>검색 결과</h4>
         {props.loading && <Loading />}
         {!props.loading &&
-          props.subscribedSchool.length < 1 && (
-            <NotFound text={"구독중인 학교가 없습니다."} />
+          props.searchSchool.length < 1 && (
+            <NotFound text={"해당 학교 페이지가 없습니다."} />
           )}
           <div className={styles.content}>
           {!props.loading && 
-              props.subscribedSchool.length > 0 && (
-              <RenderSubscribedSchool schools={props.subscribedSchool} />
+              props.searchSchool.length > 0 && (
+              <RenderSubscribedSchool schools={props.searchSchool} />
             )}
         </div>
       </div>
@@ -33,8 +33,8 @@ const RenderSubscribedSchool = props =>
 const NotFound = props => <span className={styles.notFound}>{props.text}</span>;
 
 
-SubscribedSchool.propTypes = {
+Search.propTypes = {
   loading: PropTypes.bool.isRequired,
 };
 
-export default SubscribedSchool;
+export default Search;

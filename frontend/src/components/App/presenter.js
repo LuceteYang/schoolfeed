@@ -5,6 +5,7 @@ import styles from "./styles.module.scss";
 import Auth from "components/Auth";
 import SubscribedFeed from "components/SubscribedFeed";
 import SubscribedSchool from "components/SubscribedSchool";
+import Search from "components/Search";
 import Navigation from "components/Navigation";
 import ProfileContainer from "components/ProfileContainer";
 
@@ -25,6 +26,7 @@ const PrivateRoutes = props => (
     <Route exact path="/" component={SubscribedFeed} />
     <Route path="/feed" component={SubscribedFeed} />
     <Route path="/school" component={SubscribedSchool} />
+    <Route path="/search/:searchTerm" component={Search} />
   	<Route path="/profile" component={ProfileContainer} />
   </Switch>
 );

@@ -18,8 +18,8 @@ class Container extends Component {
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
     const { getSubscribedFeed } = this.props;
-    if (!this.props.subscribedFeed) {
-      // 이미 생성된 feed가 없을 경우에 호출
+    if (!this.props.subscribedFeed || this.props.subscribedFeed.length == 0) {
+      // 이미 생성된 feed가 없거나 이전에 생성된 feed 정보가 없는 경우
         getSubscribedFeed(0);
       } else {
         this.setState({
