@@ -20,6 +20,9 @@ class School(TimeStampedModel):
     location = models.CharField(_("Location of School"), max_length=140, null=True)
     creator = models.ForeignKey(user_models.User, null=True, on_delete=models.SET_NULL, related_name="school")
     deleted_at = models.DateTimeField(null=True)
+    @property
+    def subscriber_count(self):
+        return self.subscribes.all().count()
 
     def save(self, *args, **kwargs):
         if self.pk:

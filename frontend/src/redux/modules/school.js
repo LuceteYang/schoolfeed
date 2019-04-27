@@ -7,6 +7,8 @@ const SET_SUBSCRIBED_SCHOOL = "SET_SUBSCRIBED_SCHOOL";
 const SUBSCRIBE_SCHOOL = "SUBSCRIBE_SCHOOL";
 const UNSUBSCRIBE_SCHOOL = "UNSUBSCRIBE_SCHOOL";
 const SEARCH_SCHOOL = "SEARCH_SCHOOL";
+const SET_SCHOOL_DETAIL = "SET_SCHOOL_DETAIL";
+const SET_SCHOOL_CONTENTS = "SET_SCHOOL_CONTENTS";
 
 // action crators
 function setSubscribedSchool(page,newSubscribedSchool) {
@@ -34,6 +36,19 @@ function setSearchSchool(newSubscribedSchool) {
   return {
     type: SEARCH_SCHOOL,
     newSubscribedSchool,
+  };
+}
+
+function setSchoolDetail(schoolDetail){
+  return {
+    type: SET_SCHOOL_DETAIL,
+    schoolDetail
+  };
+}
+function setSchoolContents(schoolContents) {
+  return {
+    type: SET_SCHOOL_CONTENTS,
+    schoolContents,
   };
 }
 
@@ -113,6 +128,47 @@ function getSearchSchool(schoolName) {
   };
 }
 
+function getSchoolDetail(schoolId) {
+  return (dispatch, getState) => {
+    const { user: { token } } = getState();
+    fetch(`/schools/${schoolId}/`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+  .then(response => {
+    if (response.status === 401) {
+      dispatch(userActions.logout());
+    }
+    if (response.status === 404) {
+      return
+    }
+    return response.json();
+  })
+  .then(json => dispatch(setSchoolDetail(json)));
+  };
+}
+
+function getSchoolContents(schoolId, lastContentsId) {
+  return (dispatch, getState) => {
+    const { user: { token } } = getState();
+    fetch(`/schools/${schoolId}/${lastContentsId}`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+  .then(response => {
+    if (response.status === 401) {
+      dispatch(userActions.logout());
+    }
+    return response.json();
+  })
+  .then(json => dispatch(setSchoolContents(json)));
+  };
+}
+
 // action creators
 
 
@@ -132,6 +188,10 @@ function reducer(state = initialState, action){
 	      return applySetSubscribedSchool(state, action);
 	    case SEARCH_SCHOOL:
 	      return applySearchSchool(state, action);
+      case SET_SCHOOL_DETAIL:
+        return applySetSchoolDetail(state, action);
+      case SET_SCHOOL_CONTENTS:
+        return applySetSchoolContents(state, action);
 		default:
 			return state;
 	}
@@ -155,8 +215,17 @@ function applySetSubscribedSchool(state, action) {
 
 function applySubscribeSchool(state, action) {
   const { schoolId } = action;
-  const { subscribedSchool, searchSchool } = state;
+  const { subscribedSchool, searchSchool, schoolDetail } = state;
   let result = {}
+  if (schoolDetail){
+    // schoolDetail.is_subscribed = true
+    const updatedSchoolDetail = {
+      ...schoolDetail,
+      subscriber_count:schoolDetail.subscriber_count+1,
+      is_subscribed:true
+    }
+    result.schoolDetail = updatedSchoolDetail;
+  }
   if (searchSchool){
     const updatedSearchSchools = searchSchool.map(school => {
       if (school.id === schoolId) {
@@ -166,13 +235,22 @@ function applySubscribeSchool(state, action) {
     });
     result.searchSchool = updatedSearchSchools;
   }
+  console.log(result)
   return { ...state, ...result };
 }
 
 function applyUnsubscribeSchool(state, action) {
   const { schoolId } = action;
-  const { subscribedSchool, searchSchool } = state;
+  const { subscribedSchool, searchSchool, schoolDetail } = state;
   let result = {}
+  if (schoolDetail){
+    const updatedSchoolDetail = {
+      ...schoolDetail,
+      subscriber_count:schoolDetail.subscriber_count-1,
+      is_subscribed:false
+    }
+    result.schoolDetail = updatedSchoolDetail;
+  }
   if (subscribedSchool){
     const updatedSubscribedSchools = subscribedSchool.filter(school => school.id!=schoolId);
     result.subscribedSchool = updatedSubscribedSchools;
@@ -186,12 +264,24 @@ function applyUnsubscribeSchool(state, action) {
     });
     result.searchSchool = updatedSearchSchools;
   }
+  console.log(result)
   return { ...state, ...result };
 }
 function applySearchSchool(state, action){
   const { newSubscribedSchool } = action;
   return { ...state, searchSchool: newSubscribedSchool };
 }
+function applySetSchoolDetail(state, action) {
+  const { schoolDetail } = action;
+  return { ...state, schoolDetail };
+}
+function applySetSchoolContents(state, action){
+  const { schoolContents } = action;
+  const { schoolDetail } = state;
+   schoolDetail.contents = schoolDetail.contents.concat(schoolContents)
+  return { ...state, schoolDetail };
+}
+
 
 // exports
 const actionCreators = {
@@ -199,6 +289,8 @@ const actionCreators = {
   	unsubscribeSchool,
   	getSubscribedSchool,
   	getSearchSchool,
+    getSchoolDetail,
+    getSchoolContents,
 };
 
 export { actionCreators };

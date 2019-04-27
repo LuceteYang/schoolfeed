@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import Container from "./container";
 import { actionCreators as schoolAction } from "redux/modules/school";
+import { push } from "react-router-redux";
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { school } = ownProps;
@@ -11,6 +12,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       } else {
         dispatch(schoolAction.subscribeSchool(school.id));
       }
+    },
+    goToSchoolDetail: () => {
+      dispatch(push(`/school/${school.id}`));
     }
   };
 };
