@@ -13,16 +13,6 @@
   }
   .column {
     /*width: 40%;*/
-    @include breakpoint("phone") {
-      &:first-child {
-        display: none;
-      }
-    }
-    @include breakpoint("tablet") {
-      &:first-child {
-        display: none;
-      }
-    }
     &:last-child {
       width: 38%;
       margin-left: 35px;

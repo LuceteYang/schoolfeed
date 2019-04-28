@@ -8,6 +8,7 @@ import SubscribedSchool from "components/SubscribedSchool";
 import Search from "components/Search";
 import SchoolDetail from "components/SchoolDetail";
 import SchoolForm from "components/SchoolForm";
+import ContentsForm from "components/ContentsForm";
 import Navigation from "components/Navigation";
 import ProfileContainer from "components/ProfileContainer";
 
@@ -30,7 +31,9 @@ const PrivateRoutes = props => (
     <Route exact path="/school" component={SubscribedSchool} />
     <Route path="/school/new" component={SchoolForm} />
     <Route exact path="/school/:schoolId" component={SchoolDetail} />
+    <Route path="/school/:schoolId/contents" component={ContentsForm} />
     <Route path="/school/:schoolId/edit" component={SchoolForm} />
+    <Route exact path="/contents/:contentsId" component={ContentsForm} />
     <Route path="/search/:searchTerm" component={Search} />
   	<Route path="/profile" component={ProfileContainer} />
   </Switch>

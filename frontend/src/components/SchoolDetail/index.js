@@ -23,6 +23,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     goToSchoolEdit: () => {
       dispatch(push(`/school/${schoolId}/edit`));
     },
+    goToContentsNew: () => {
+      dispatch(push(`/school/${schoolId}/contents`));
+    },
     goToSubscribeSchool: () => {
       dispatch(push(`/school`));
     },

@@ -79,13 +79,14 @@ class Container extends Component {
       }
   }
   render() {
-    const { schoolDetail, handleClick, goToSchoolEdit } = this.props;
+    const { schoolDetail, handleClick, goToSchoolEdit, goToContentsNew } = this.props;
     return (
       <SchoolDetail 
       {...this.state}
         handleClick={handleClick}
         goToSchoolEdit={goToSchoolEdit}
         schoolDetail={schoolDetail}
+        goToContentsNew={goToContentsNew}
         schoolDelete={this._schoolDelete}
       />
     );

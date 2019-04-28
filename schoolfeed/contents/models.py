@@ -24,6 +24,6 @@ class Contents(school_models.TimeStampedModel):
 	def save(self, *args, **kwargs):	
 		if self.pk:
 			contents = Contents.objects.get(pk=self.pk)
-			if Contents.main_image != self.main_image:
+			if contents.main_image != self.main_image:
 				contents.main_image.delete(save=False)
 		super(Contents, self).save(*args, **kwargs)

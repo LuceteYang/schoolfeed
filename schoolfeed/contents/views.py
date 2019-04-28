@@ -55,7 +55,7 @@ class Contents(GenericAPIView):
 			except (schools_models.Member.DoesNotExist) as e:
 				return Response(status=status.HTTP_400_BAD_REQUEST)
 			serializer.save(creator=user)
-			return Response(status=status.HTTP_201_CREATED)
+			return Response(serializer.data,status=status.HTTP_200_OK)
 
 		else:
 			return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -111,7 +111,7 @@ class ContentsDetail(GenericAPIView):
 			if school is None:
 				return Response(status=status.HTTP_400_BAD_REQUEST)
 			serializer.save()
-			return Response(status=status.HTTP_204_NO_CONTENT)
+			return Response({"id":contents_id, "school":contents.school.id}, status=status.HTTP_200_OK)
 
 		else:
 			return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -22,7 +22,7 @@ class ContentsSerializer(serializers.ModelSerializer):
 	
 	creator = users_serializers.ListUserSerializer(read_only=True)
 	school = SchoolListSerializer(read_only=True)
-	is_self= serializers.SerializerMethodField()
+	is_mine= serializers.SerializerMethodField()
 	class Meta:
 		model = models.Contents
 		fields = (
@@ -32,13 +32,12 @@ class ContentsSerializer(serializers.ModelSerializer):
 			'text',
 			'school',
 			'natural_time',
-			'is_self'
+			'is_mine'
 			) 
-	def get_is_self(self, contents):
+	def get_is_mine(self, contents):
 		if 'request' in self.context:
 			
 			request =  self.context['request']
-			print(request)
 			if contents.creator.id == request.user.id:
 				return True
 			else:

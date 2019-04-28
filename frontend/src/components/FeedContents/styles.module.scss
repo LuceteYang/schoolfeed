@@ -34,6 +34,12 @@
         font-size: $small-font-size;
       }
     }
+    .edit-icon-area{
+      width:60%;
+      .edit-icon{
+        float:right;
+      }
+    }
   }
   .meta {
     padding: 15px;
