@@ -8,6 +8,7 @@ class Container extends Component {
   };
   static propTypes = {
     getSubscribedSchool: PropTypes.func.isRequired,
+    goToSchoolNew: PropTypes.func.isRequired,
     subscribedSchool: PropTypes.array
   };
   componentDidMount() {

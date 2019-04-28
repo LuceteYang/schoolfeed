@@ -11,7 +11,8 @@ class Container extends Component {
     errorMessage:""
   };
   static propTypes = {
-    createAccount: PropTypes.func.isRequired
+    createAccount: PropTypes.func.isRequired,
+    errorMessage: PropTypes.string
   };
   // {"username":["This field may not be blank."],"name":["This field may not be blank."]}
   componentWillReceiveProps = nextProps => {

@@ -14,6 +14,10 @@ class Container extends Component {
     loading:true,
     action:"new"
   };
+  static propTypes = {
+    goToSchool: PropTypes.func.isRequired,
+    goToHome: PropTypes.func.isRequired,
+  };
   componentDidMount() {
       if(this.props.location.pathname.match(/^\/school\/(\d+)\/contents/)){
         // 컨텐츠 생성
@@ -27,11 +31,9 @@ class Container extends Component {
             Authorization: `JWT ${this.props.token}`,
             "Content-Type": "application/json"
           }
-        })
-        .then(response => {
+        }).then(response => {
           return response.json();
-        }).
-        then(json =>{
+        }).then(json =>{
           if (json.is_mine===false){
             return this.props.goToHome()
           }
@@ -95,8 +97,7 @@ class Container extends Component {
       })
       .then(response => {
         return response.json();
-      }).
-      then(json =>{
+      }).then(json =>{
         alert(`${message}되었습니다!`)
         this.props.goToSchool(json.school)
       })
@@ -136,7 +137,6 @@ class Container extends Component {
   };
 
   render() {
-    const { handleClick } = this.props;
     return (
       <ContentsForm 
           {...this.state} 

@@ -8,7 +8,6 @@ import thunk from "redux-thunk";
 
 import user from  'redux/modules/user';
 import school from  'redux/modules/school';
-import contents from  'redux/modules/contents';
 
 const env = process.env.NODE_ENV;
 
@@ -24,7 +23,6 @@ if (env === "development") {
 const reducer = combineReducers({
   user,
   school,
-  contents,
   router: connectRouter(history),
 });
 

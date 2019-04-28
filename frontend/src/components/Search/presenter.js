@@ -35,6 +35,7 @@ const NotFound = props => <span className={styles.notFound}>{props.text}</span>;
 
 Search.propTypes = {
   loading: PropTypes.bool.isRequired,
+  searchSchool: PropTypes.array
 };
 
 export default Search;

@@ -65,7 +65,6 @@ function usernameLogin(username, password) {
         }
       })
       .catch(err => {
-        console.log(err)
       });
   };
 }
@@ -173,7 +172,7 @@ function applySetSubscribedFeed(state, action) {
   const { newSubscribedFeed, last_contents_id } = action;
   const { subscribedFeed } = state;
   let updatedUserList;
-  if(last_contents_id == 0 ){
+  if(last_contents_id === 0 ){
     updatedUserList = newSubscribedFeed;
   }else{
     updatedUserList = subscribedFeed.concat(newSubscribedFeed)

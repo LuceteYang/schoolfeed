@@ -12,7 +12,12 @@ class Container extends Component {
   };
   static propTypes = {
     getSchoolDetail: PropTypes.func.isRequired,
-    getSchoolContents: PropTypes.func.isRequired
+    getSchoolContents: PropTypes.func.isRequired,
+    goToSchoolEdit: PropTypes.func.isRequired,
+    goToContentsNew: PropTypes.func.isRequired,
+    goToSubscribeSchool: PropTypes.func.isRequired,
+    handleClick: PropTypes.func.isRequired,
+    token: PropTypes.string.isRequired
   };
   constructor(props){
     super(props);
@@ -31,13 +36,12 @@ class Container extends Component {
       this.setState({
         loading: false
       });
-    if (this.props.schoolDetail && this.props.schoolDetail.contents.length== nextProps.schoolDetail.contents.length){
+    if (this.props.schoolDetail && this.props.schoolDetail.contents.length === nextProps.schoolDetail.contents.length){
           window.removeEventListener("scroll", this.handleScroll);
       }
     }
   };
   _schoolDelete = () => {
-    console.log(this.props.token)
     confirmAlert({
       title: this.props.schoolDetail.name+'학교 페이지를 삭제하시겠습니까?',
       buttons: [

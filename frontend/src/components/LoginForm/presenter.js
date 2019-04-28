@@ -42,8 +42,4 @@ LoginForm.propTypes = {
   errorExist: PropTypes.bool.isRequired
 };
 
-LoginForm.contextTypes = {
-  t: PropTypes.func.isRequired
-};
-
 export default LoginForm;

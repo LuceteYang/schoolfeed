@@ -38,6 +38,8 @@ const NotFound = props => <span className={styles.notFound}>{props.text}</span>;
 
 SubscribedSchool.propTypes = {
   loading: PropTypes.bool.isRequired,
+  goToSchoolNew: PropTypes.func.isRequired,
+  subscribedSchool: PropTypes.array
 };
 
 export default SubscribedSchool;

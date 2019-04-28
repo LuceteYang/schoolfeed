@@ -8,7 +8,7 @@ const SchoolDisplay = (props, context) => (
     <Link to={`/school/${props.school.id}`}>
     <div className={styles.column}>
       <img
-        src={props.school.image || require("images/noPhoto.jpg")}
+        src={props.school.image || require("images/school.png")}
         alt={props.school.name}
         className={props.big ? styles.bigAvatar : styles.avatar}
       />

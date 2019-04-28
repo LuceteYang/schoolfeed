@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ProfileContainer from "./presenter";
 import axios from 'axios';
+import PropTypes from "prop-types";
 
 class Container extends Component {
 	state = {
@@ -10,6 +11,10 @@ class Container extends Component {
 	    "password":"",
 	    "editShow":false
 	};
+  static propTypes = {
+    logout: PropTypes.func.isRequired,
+    token: PropTypes.string.isRequired
+  };
 	componentDidMount() {
       let axiosConfig = {
         headers: {

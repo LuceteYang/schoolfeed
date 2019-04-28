@@ -41,11 +41,10 @@
         .image-upload{
           .image{
             cursor: pointer;
-            width: 100px;
-            height: 100px;
-          }
-          .file-input{
-              display: none;
+            width: 100%;
+            .file-input{
+                  display: none;
+              }
           }
         }
         .form {
@@ -58,6 +57,7 @@
           }
           .text-input {
             border: 1px solid #efefef;
+            height: 200px; 
             border-radius: 3px;
             background-color: $bg-color;
             margin-bottom: 7px;
@@ -68,6 +68,12 @@
               outline: none;
               border: 1px solid #b2b2b2;
             }
+          }
+          .file-input{
+              display: none;
+          }
+          .input-icon{
+              float:right;
           }
         }
         .button {

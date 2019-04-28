@@ -12,6 +12,10 @@ class Container extends Component {
     loading:true,
     action:"new"
   };
+  static propTypes = {
+    goToSchool: PropTypes.func.isRequired,
+    goToHome: PropTypes.func.isRequired,
+  };
   componentDidMount() {
       if(this.props.location.pathname==="/school/new"){
         // 학교 생성
@@ -28,8 +32,7 @@ class Container extends Component {
         })
         .then(response => {
           return response.json();
-        }).
-        then(json =>{
+        }).then(json =>{
           if (json.is_manager===false){
             return this.props.goToHome()
           }
@@ -99,8 +102,7 @@ class Container extends Component {
       })
       .then(response => {
         return response.json();
-      }).
-      then(json =>{
+      }).then(json =>{
         alert(`${message}되었습니다!`)
         this.props.goToSchool(json.id)
       })
@@ -114,7 +116,6 @@ class Container extends Component {
 
 
   render() {
-    const { contents, handleClick } = this.props;
     return (
       <SchoolForm 
           {...this.state} 

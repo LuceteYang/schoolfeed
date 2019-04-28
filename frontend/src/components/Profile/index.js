@@ -8,7 +8,7 @@ const Profile = (props, context) => (
       <label>
         <img
           src={props.profile_image ? props.profile_image : require("images/noPhoto.jpg")} 
-          alt={props.username}
+          alt={props.name}
           className={styles.image}
         />
       </label>
@@ -26,6 +26,10 @@ const Profile = (props, context) => (
 
 
 Profile.propTypes = {
+  profile_image: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  showEditView: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired
 };
 

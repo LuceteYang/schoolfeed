@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import styles from "./styles.module.scss";
 import Loading from "components/Loading";
@@ -33,9 +33,9 @@ const SchoolInfo = props => (
     <div  className={styles.container} >
     	<div className={styles.profile}>
 	        <img
-	          src={props.schoolDetail.image ? props.schoolDetail.image : require("images/noPhoto.jpg")} 
+	          src={props.schoolDetail.image ? props.schoolDetail.image : require("images/school.png")} 
 	          alt={props.schoolDetail.name}
-	          className={styles.info.image}
+	          className={styles.image}
 	        />
     	</div>
     	<div className={styles.info}>
@@ -56,7 +56,7 @@ const SchoolInfo = props => (
         {props.schoolDetail.is_subscribed ? "구독취소" : "구독"}
       </button>
       {props.schoolDetail.is_manager && (
-      <>
+      <Fragment>
         <button className={styles.button} onClick={()=>{props.goToSchoolEdit()}}>
           수정
         </button>
@@ -66,7 +66,7 @@ const SchoolInfo = props => (
         <button className={styles.button} onClick={()=>{props.goToContentsNew()}}>
           글 등록
         </button>
-      </>
+      </Fragment>
       )}
     	</div>
     </div>
@@ -82,7 +82,21 @@ const NotFound = props => (
 
 SchoolDetail.propTypes = {
   loading: PropTypes.bool.isRequired,
+  goToSchoolEdit: PropTypes.func.isRequired,
+  goToContentsNew: PropTypes.func.isRequired,
+  schoolDelete: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired,
 };
+RenderSchoolDetail.propTypes = {
+  schoolDetail: PropTypes.shape({
+    image: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    location: PropTypes.string,
+    subscriber_count: PropTypes.number.isRequired,
+    is_subscribed: PropTypes.bool.isRequired,
+    is_manager: PropTypes.bool.isRequired,
+    contents: PropTypes.array
+  }).isRequired,
+}
 
 export default SchoolDetail;

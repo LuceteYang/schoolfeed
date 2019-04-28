@@ -202,7 +202,7 @@ function applySetSubscribedSchool(state, action) {
   const { newSubscribedSchool, page } = action;
   const { subscribedSchool } = state;
   let updatedSubscribedSchool;
-  if(page == 1 ){
+  if(page === 1 ){
     updatedSubscribedSchool = newSubscribedSchool;
   }else{
     updatedSubscribedSchool = subscribedSchool.concat(newSubscribedSchool)
@@ -235,7 +235,6 @@ function applySubscribeSchool(state, action) {
     });
     result.searchSchool = updatedSearchSchools;
   }
-  console.log(result)
   return { ...state, ...result };
 }
 
@@ -252,7 +251,7 @@ function applyUnsubscribeSchool(state, action) {
     result.schoolDetail = updatedSchoolDetail;
   }
   if (subscribedSchool){
-    const updatedSubscribedSchools = subscribedSchool.filter(school => school.id!=schoolId);
+    const updatedSubscribedSchools = subscribedSchool.filter(school => school.id!==schoolId);
     result.subscribedSchool = updatedSubscribedSchools;
   }
   if (searchSchool){

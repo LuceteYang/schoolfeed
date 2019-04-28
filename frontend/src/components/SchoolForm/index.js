@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import { actionCreators as schoolAction } from "redux/modules/school";
 import Container from "./container";
 import { push } from "react-router-redux";
 

@@ -47,6 +47,7 @@ FeedContents.propTypes = {
   }).isRequired,
   main_image: PropTypes.string,
   text: PropTypes.string.isRequired,
+  is_mine: PropTypes.bool.isRequired,
   natural_time: PropTypes.string.isRequired
 };
 

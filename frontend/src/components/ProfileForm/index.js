@@ -8,7 +8,7 @@ const ProfileForm = (props, context) => (
 	    <label>
 	      <img
 	        src={props.profile_image ? props.profile_image : require("images/noPhoto.jpg")} 
-	        alt={props.username}
+	        alt={props.name}
 	        className={styles.image}
 	      />
 	      <input className={styles.fileInput} onChange={props.onChange} id="file-input" type="file" />
@@ -50,7 +50,14 @@ const ProfileForm = (props, context) => (
 );
 
 ProfileForm.propTypes = {
-
+  profile_image: PropTypes.string.isRequired,
+  editShow: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string
 };
 
 export default ProfileForm;

@@ -11,8 +11,8 @@ const SchoolForm = (props, context) => (
           <div className={styles.imageUpload}>
             <label>
               <img
-                src={props.image ? props.image : require("images/noPhoto.jpg")} 
-                alt={props.username}
+                src={props.image ? props.image : require("images/13229625.jpg")} 
+                alt={props.name}
                 className={styles.image}
               />
               <input className={styles.fileInput} onChange={props.onChange} id="file-input" type="file" />
@@ -48,7 +48,15 @@ const SchoolForm = (props, context) => (
 );
 
 SchoolForm.propTypes = {
-  // logout: PropTypes.func.isRequired
+  id: PropTypes.number,
+  name: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+  image: PropTypes.string,
+  action: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  errorMessage: PropTypes.string
 };
 
 

@@ -16,7 +16,7 @@ const ProfileContainer = (props, context) => (
 );
 
 ProfileContainer.propTypes = {
-  logout: PropTypes.func.isRequired
+  editShow: PropTypes.bool.isRequired
 };
 
 
