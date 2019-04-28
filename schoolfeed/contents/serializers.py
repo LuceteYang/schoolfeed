@@ -22,6 +22,7 @@ class ContentsSerializer(serializers.ModelSerializer):
 	
 	creator = users_serializers.ListUserSerializer(read_only=True)
 	school = SchoolListSerializer(read_only=True)
+	is_self= serializers.SerializerMethodField()
 	class Meta:
 		model = models.Contents
 		fields = (
@@ -30,8 +31,19 @@ class ContentsSerializer(serializers.ModelSerializer):
 			'main_image',
 			'text',
 			'school',
-			'natural_time'
+			'natural_time',
+			'is_self'
 			) 
+	def get_is_self(self, contents):
+		if 'request' in self.context:
+			
+			request =  self.context['request']
+			print(request)
+			if contents.creator.id == request.user.id:
+				return True
+			else:
+				return False
+		return False
 
 class InputContentsSerializer(serializers.ModelSerializer):
 	
@@ -49,4 +61,4 @@ class InputContentsSerializer(serializers.ModelSerializer):
 			) 
 
 class ContentsQuerySerializer(serializers.Serializer):
-    last_contents_id = serializers.IntegerField(help_text="this field is generated from a query_serializer", required=True)
+	last_contents_id = serializers.IntegerField(help_text="this field is generated from a query_serializer", required=True)

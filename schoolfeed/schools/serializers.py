@@ -5,7 +5,7 @@ from schoolfeed.contents import serializers as contents_serializers
 
 
 class SchoolsSerializer(serializers.Serializer):
-	position = serializers.IntegerField(required=True)
+	id = serializers.IntegerField(read_only=True)
 	name = serializers.CharField(required=True)
 	image = serializers.FileField(required=False)
 	location = serializers.CharField(required=False)
@@ -31,12 +31,16 @@ class SchoolDetailSerializer(serializers.ModelSerializer):
 			'contents',
 		)
 	def paginated_contents(self, obj):
-		print('paginated_contents',obj)
+		
 		contents = contents_models.Contents.objects.filter(
 									school=obj.id,
 									deleted_at__isnull=True
 								).order_by('-id')[:10]
-		serializer = contents_serializers.ContentsSerializer(contents,many=True)
+		if 'request' in self.context:
+			request = self.context['request']
+			serializer = contents_serializers.ContentsSerializer(contents,many=True, context={'request': request})
+		else:
+			serializer = contents_serializers.ContentsSerializer(contents,many=True)
 		return serializer.data
 	def get_is_subscribed(self, obj):
 		if 'request' in self.context:

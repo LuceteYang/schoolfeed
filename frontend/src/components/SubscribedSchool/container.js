@@ -23,11 +23,12 @@ class Container extends Component {
     }
   };
   render() {
-    const { subscribedSchool } = this.props;
+    const { subscribedSchool, goToSchoolNew } = this.props;
     return (
       <SubscribedSchool 
         {...this.state} 
         subscribedSchool={subscribedSchool} 
+        goToSchoolNew={goToSchoolNew}
       />
     );
   }

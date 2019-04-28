@@ -26,7 +26,6 @@ class MemberAdmin(admin.ModelAdmin):
 		'member',
 		'school',
 		'school',
-		'position',
 		'role'
 	)
 

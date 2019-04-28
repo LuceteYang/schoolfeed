@@ -56,7 +56,7 @@ function setSchoolContents(schoolContents) {
 function getSubscribedSchool(page) {
   return (dispatch, getState) => {
     const { user: { token } } = getState();
-    fetch(`/schools/?page=${page}`, {
+    fetch(`/api/schools/?page=${page}`, {
       headers: {
         Authorization: `JWT ${token}`,
         "Content-Type": "application/json"
@@ -76,7 +76,7 @@ function subscribeSchool(schoolId) {
   return (dispatch, getState) => {
     dispatch(doSubscribeSchool(schoolId));
     const { user: { token } } = getState();
-    fetch(`/schools/${schoolId}/subscribes/`, {
+    fetch(`/api/schools/${schoolId}/subscribes/`, {
       method: "POST",
       headers: {
         Authorization: `JWT ${token}`
@@ -95,7 +95,7 @@ function unsubscribeSchool(schoolId) {
   return (dispatch, getState) => {
     dispatch(doUnsubscribeSchool(schoolId));
     const { user: { token } } = getState();
-    fetch(`/schools/${schoolId}/unsubscribes/`, {
+    fetch(`/api/schools/${schoolId}/unsubscribes/`, {
       method: "DELETE",
       headers: {
         Authorization: `JWT ${token}`
@@ -112,7 +112,7 @@ function unsubscribeSchool(schoolId) {
 function getSearchSchool(schoolName) {
   return (dispatch, getState) => {
     const { user: { token } } = getState();
-    fetch(`/schools/search/?school_name=${schoolName}`, {
+    fetch(`/api/schools/search/?school_name=${schoolName}`, {
       headers: {
         Authorization: `JWT ${token}`,
         "Content-Type": "application/json"
@@ -131,7 +131,7 @@ function getSearchSchool(schoolName) {
 function getSchoolDetail(schoolId) {
   return (dispatch, getState) => {
     const { user: { token } } = getState();
-    fetch(`/schools/${schoolId}/`, {
+    fetch(`/api/schools/${schoolId}/`, {
       headers: {
         Authorization: `JWT ${token}`,
         "Content-Type": "application/json"
@@ -153,7 +153,7 @@ function getSchoolDetail(schoolId) {
 function getSchoolContents(schoolId, lastContentsId) {
   return (dispatch, getState) => {
     const { user: { token } } = getState();
-    fetch(`/schools/${schoolId}/contents/?last_contents_id=${lastContentsId}`, {
+    fetch(`/api/schools/${schoolId}/contents/?last_contents_id=${lastContentsId}`, {
       headers: {
         Authorization: `JWT ${token}`,
         "Content-Type": "application/json"
@@ -264,7 +264,6 @@ function applyUnsubscribeSchool(state, action) {
     });
     result.searchSchool = updatedSearchSchools;
   }
-  console.log(result)
   return { ...state, ...result };
 }
 function applySearchSchool(state, action){

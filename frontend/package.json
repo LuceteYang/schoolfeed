@@ -43,6 +43,7 @@
     "postcss-safe-parser": "4.0.1",
     "react": "^16.8.6",
     "react-app-polyfill": "^1.0.0",
+    "react-confirm-alert": "2.4.0",
     "react-dev-utils": "^9.0.0",
     "react-dom": "^16.8.6",
     "react-ionicons": "2.0.2",

@@ -51,14 +51,8 @@ class Member(TimeStampedModel):
         (1, '관리자'),
         (0, '일반 회원'),
     )
-    POSITION_CHOICES = (
-        (0, '학생'),
-        (1, '선생님'),
-        (2, '기타'),
-    )
     member  = models.ForeignKey(user_models.User, null=True, on_delete=models.SET_NULL)
     school = models.ForeignKey(School, null=True, on_delete=models.SET_NULL, related_name="joins")
-    position = models.IntegerField(choices=POSITION_CHOICES, blank=True)
     role = models.IntegerField(choices=ROLE_CHOICES, default=0)
 
 

@@ -25,7 +25,6 @@ class Schools(GenericAPIView):
 
         ---
         # 내용
-            - position : 생성자 직책
             - name : 학교 이름
             - image : 학교 사진
             - location : 학교 위치
@@ -75,14 +74,13 @@ class Schools(GenericAPIView):
             models.Member.objects.create(
                 school=school,
                 member=user,
-                position=request.data.get('position'),
                 role=1
             )
             models.Subscribe.objects.create(
                 subscriber=user,
                 school=school
             )
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            return Response(data=serializers.SchoolListSerializer(school).data, status=status.HTTP_201_CREATED)
 
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -157,13 +155,13 @@ class SchoolDetail(GenericAPIView):
         if school is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = serializers.SchoolDetailSerializer(school, data=request.data, partial=True)
+        serializer = serializers.SchoolDetailSerializer(school, data=request.data, partial=True, context={'request': request})
 
         if serializer.is_valid():
 
             serializer.save(school=school)
 
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
 
         else:
 
@@ -258,7 +256,7 @@ class ContentsSchool(APIView):
         contents =  contents_models.Contents.objects.filter(
                                     **filter_options
                                 ).order_by('-id')[:10]
-        serializer = contents_serializers.ContentsSerializer(contents, many=True)
+        serializer = contents_serializers.ContentsSerializer(contents, many=True, context={'request': request})
         return Response(data=serializer.data)
 
         

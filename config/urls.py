@@ -31,14 +31,14 @@ schema_view = get_schema_view(
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     # rest-auth login, registration
-    path('rest-auth/', include(("rest_auth.urls","rest_framework"),namespace="rest_framework")),
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('api/rest-auth/', include(("rest_auth.urls","rest_framework"),namespace="rest_framework")),
+    path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     # User management
-    path('users/', include("schoolfeed.users.urls")),
+    path('api/users/', include("schoolfeed.users.urls")),
     # School management
-    path('schools/', include("schoolfeed.schools.urls")),
+    path('api/schools/', include("schoolfeed.schools.urls")),
     # Content management
-    path('contents/', include("schoolfeed.contents.urls")),
+    path('api/contents/', include("schoolfeed.contents.urls")),
     
     # drf_yasg Swagger
     path('swagger<str:format>', schema_view.without_ui(cache_timeout=0), name='schema-json'),

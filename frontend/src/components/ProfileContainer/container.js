@@ -16,7 +16,7 @@ class Container extends Component {
             Authorization: `JWT ${this.props.token}`
         }
       };
-      axios.get(`/users/`,axiosConfig)
+      axios.get(`/api/users/`,axiosConfig)
         .then(res => {
 		    this.setState({
 		    	...res.data
@@ -68,7 +68,7 @@ class Container extends Component {
 	    this._requestChangeProfile(formData)
 	}
 	_requestChangeProfile = formData =>{
-	    fetch(`/users/`, {
+	    fetch(`/api/users/`, {
 	      method: 'PUT',
 	      body: formData,
       	  headers: {

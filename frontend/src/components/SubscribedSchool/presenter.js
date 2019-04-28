@@ -9,6 +9,9 @@ const SubscribedSchool = (props, context) => {
     <div className={styles.school}>
       <div className={styles.section}>
         <h4 className={styles.title}>구독중인 학교</h4>
+        <button className={styles.button} onClick={props.goToSchoolNew}>
+          학교 생성
+        </button>
         {props.loading && <Loading />}
         {!props.loading &&
           props.subscribedSchool.length < 1 && (

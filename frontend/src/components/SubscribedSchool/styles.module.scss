@@ -11,6 +11,7 @@
         color: $dark-grey;
         font-weight: 600;
         margin-bottom: 20px;
+        display: inline;
       }
       .not-found {
         text-align: center;
@@ -22,6 +23,10 @@
           display: flex;
           justify-content: flex-start;
           flex-wrap: wrap;
+        }
+        .button {
+          margin-left:10px;
+           @include blueButton();
         }
       }
 }

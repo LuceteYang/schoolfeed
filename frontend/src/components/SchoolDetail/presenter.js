@@ -56,9 +56,17 @@ const SchoolInfo = props => (
         {props.schoolDetail.is_subscribed ? "구독취소" : "구독"}
       </button>
       {props.schoolDetail.is_manager && (
-      <button className={styles.button} onClick={()=>{props.handleClick(props.schoolDetail.is_subscribed)}}>
-        수정
-      </button>
+      <>
+        <button className={styles.button} onClick={()=>{props.goToSchoolEdit()}}>
+          수정
+        </button>
+        <button className={styles.button} onClick={()=>{props.schoolDelete()}}>
+          삭제
+        </button>
+        <button className={styles.button} onClick={()=>{props.handleClick(props.schoolDetail.is_subscribed)}}>
+          글 등록
+        </button>
+      </>
       )}
     	</div>
     </div>

@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import SchoolDetail from "./presenter";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import axios from 'axios';
 
 class Container extends Component {
   state = {
@@ -33,6 +36,33 @@ class Container extends Component {
       }
     }
   };
+  _schoolDelete = () => {
+    console.log(this.props.token)
+    confirmAlert({
+      title: this.props.schoolDetail.name+'학교 페이지를 삭제하시겠습니까?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+              let axiosConfig = {
+                headers: {
+                    Authorization: `JWT ${this.props.token}`
+                }
+              };
+              axios.delete(`/api/schools/${this.props.schoolDetail.id}/`,axiosConfig)
+                .then(res => {
+                  alert("삭제 되었습니다.")
+                  this.props.goToSubscribeSchool()
+                })
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {}
+        }
+      ]
+    });
+  };
   handleScroll() {
 
       const { schoolDetail, getSchoolContents } = this.props;
@@ -49,12 +79,14 @@ class Container extends Component {
       }
   }
   render() {
-    const { schoolDetail, handleClick } = this.props;
+    const { schoolDetail, handleClick, goToSchoolEdit } = this.props;
     return (
       <SchoolDetail 
       {...this.state}
         handleClick={handleClick}
+        goToSchoolEdit={goToSchoolEdit}
         schoolDetail={schoolDetail}
+        schoolDelete={this._schoolDelete}
       />
     );
   }

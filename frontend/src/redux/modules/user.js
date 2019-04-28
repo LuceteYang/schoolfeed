@@ -46,7 +46,7 @@ function setSubscribedFeed(last_contents_id,newSubscribedFeed) {
 function usernameLogin(username, password) {
 	//dispatch, fetch react-thunk임
   return dispatch => {
-    fetch("/rest-auth/login/", {
+    fetch("/api/rest-auth/login/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -71,7 +71,7 @@ function usernameLogin(username, password) {
 }
 function createAccount(username, password, email, name) {
   return dispatch => {
-    fetch("/rest-auth/registration/", {
+    fetch("/api/rest-auth/registration/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -97,7 +97,7 @@ function createAccount(username, password, email, name) {
 function getSubscribedFeed(last_contents_id) {
   return (dispatch, getState) => {
     const { user: { token } } = getState();
-    fetch(`/contents/?last_contents_id=${last_contents_id}`, {
+    fetch(`/api/contents/?last_contents_id=${last_contents_id}`, {
       headers: {
         Authorization: `JWT ${token}`,
         "Content-Type": "application/json"

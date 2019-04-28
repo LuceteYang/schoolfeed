@@ -1,11 +1,13 @@
 import { connect } from "react-redux";
 import { actionCreators as schoolAction } from "redux/modules/school";
 import Container from "./container";
+import { push } from "react-router-redux";
 
 const mapStateToProps = (state, ownProps) => {
-  const { school: { schoolDetail } } = state;
+  const { school: { schoolDetail }, user: { token } } = state;
   return {
-    schoolDetail
+    schoolDetail,
+    token
   };
 };
 
@@ -17,6 +19,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     getSchoolContents: (lastContentsId) => {
       dispatch(schoolAction.getSchoolContents(schoolId, lastContentsId));
+    },
+    goToSchoolEdit: () => {
+      dispatch(push(`/school/${schoolId}/edit`));
+    },
+    goToSubscribeSchool: () => {
+      dispatch(push(`/school`));
     },
     handleClick: (is_subscribed) => {
       if (is_subscribed) {

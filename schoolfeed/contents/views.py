@@ -40,8 +40,8 @@ class Contents(GenericAPIView):
 		filter_options = {k:v for k,v in field_value_pairs}
 		contents =  models.Contents.objects.filter(
 									**filter_options
-								).order_by('-id')[:3]
-		serializer = serializers.ContentsSerializer(contents, many=True)
+								).order_by('-id')[:10]
+		serializer = serializers.ContentsSerializer(contents, many=True, context={'request': request})
 		return Response(data=serializer.data)
 
 	def post(self, request, format=None):
@@ -92,7 +92,7 @@ class ContentsDetail(GenericAPIView):
 		except models.Contents.DoesNotExist:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
-		serializer = serializers.ContentsSerializer(contents)
+		serializer = serializers.ContentsSerializer(contents, context={'request': request})
 
 		return Response(data=serializer.data, status=status.HTTP_200_OK)
 
@@ -107,7 +107,6 @@ class ContentsDetail(GenericAPIView):
 		serializer = serializers.InputContentsSerializer(contents,data=request.data, partial=True)
 
 		if serializer.is_valid():
-			print(contents.school.id)
 			school = self.find_managing_school(contents.school.id, user)
 			if school is None:
 				return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -115,7 +114,6 @@ class ContentsDetail(GenericAPIView):
 			return Response(status=status.HTTP_204_NO_CONTENT)
 
 		else:
-			print(serializer.errors)
 			return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
