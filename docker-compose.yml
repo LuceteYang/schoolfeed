@@ -1,0 +1,22 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8005:8005"
+    volumes:
+      - .:/code
+      - ./config/nginx:/etc/nginx/conf.d
+    depends_on:
+      - web
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/code
+    ports:
+      - "8004:8004"
+    command: gunicorn -b 0.0.0.0:8004 --env DJANGO_SETTINGS_MODULE=config.settings.production schoolfeed.wsgi:application
+    env_file:
+      - .env
