@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a4fdd88e.chunk.css",
+    "main.js": "/static/js/main.8c0e6638.chunk.js",
+    "main.js.map": "/static/js/main.8c0e6638.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+    "static/css/2.eaa9118f.chunk.css": "/static/css/2.eaa9118f.chunk.css",
+    "static/js/2.899e5e86.chunk.js": "/static/js/2.899e5e86.chunk.js",
+    "static/js/2.899e5e86.chunk.js.map": "/static/js/2.899e5e86.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.6eb54c103d72c4fe99c17185ca3a4b73.js": "/precache-manifest.6eb54c103d72c4fe99c17185ca3a4b73.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.eaa9118f.chunk.css.map": "/static/css/2.eaa9118f.chunk.css.map",
+    "static/css/main.a4fdd88e.chunk.css.map": "/static/css/main.a4fdd88e.chunk.css.map",
+    "static/media/13229625.jpg": "/static/media/13229625.a4b401e3.jpg",
+    "static/media/logo.png": "/static/media/logo.96b80822.png",
+    "static/media/nicole-honeywill-1465559-unsplash-min.jpg": "/static/media/nicole-honeywill-1465559-unsplash-min.30e840ea.jpg",
+    "static/media/school.png": "/static/media/school.ada04faa.png"
+  }
+}
