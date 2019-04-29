@@ -11,3 +11,7 @@ ADD ./requirements/production.txt /code/requirements/production.txt
 RUN pip install -r /code/requirements/production.txt
 
 ADD . /code	
+
+RUN ["chmod", "+x", "start.sh"]
+
+ENTRYPOINT ["sh","./start.sh"]

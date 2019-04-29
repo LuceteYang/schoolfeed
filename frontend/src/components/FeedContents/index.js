@@ -9,11 +9,13 @@ const FeedContents = (props, context) => {
     return (
     <div className={styles.feedContents}>
       <header className={styles.header}>
+      <div className={styles.contentsImage}>
     		<img
     			src={props.creator.profile_image || require("images/noPhoto.jpg")}
     			alt={props.creator.name}
     			className={styles.image}
     		/>
+        </div>
     		<div className={styles.headerColumn}>
     			<span className={styles.creator}>{props.creator.name}</span>
     			<span className={styles.location}><Link to={`/school/${props.school.id}`}>{props.school.name}</Link>{'\u00A0'}{'\u00A0'}{'\u00A0'}<TimeStamp time={props.natural_time} /></span>
