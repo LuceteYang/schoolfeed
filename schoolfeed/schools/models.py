@@ -5,8 +5,8 @@ from schoolfeed.users import models as user_models
 
 class TimeStampedModel(models.Model):
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(_("생성 시간"),auto_now_add=True)
+    updated_at = models.DateTimeField(_("수정 시간"),auto_now=True)
 
     class Meta:
         # 추상클래스
@@ -15,11 +15,12 @@ class TimeStampedModel(models.Model):
 
 class School(TimeStampedModel):
 
-    name = models.CharField(_("Name of School"), max_length=140)
-    image = models.ImageField(null=True)
-    location = models.CharField(_("Location of School"), max_length=140, null=True)
-    creator = models.ForeignKey(user_models.User, null=True, on_delete=models.SET_NULL, related_name="school")
-    deleted_at = models.DateTimeField(null=True)
+    name = models.CharField(_("학교 이름"), max_length=140)
+    image = models.ImageField(_("학교 사진"), null=True)
+    location = models.CharField(_("학교 위치"), max_length=140, null=True)
+    deleted_at = models.DateTimeField(_("학교 삭제 시간"),null=True)
+    creator = models.ForeignKey(user_models.User,help_text="학교 생성자", null=True, on_delete=models.SET_NULL, related_name="school")
+    
     @property
     def subscriber_count(self):
         return self.subscribes.all().count()
@@ -40,8 +41,8 @@ class School(TimeStampedModel):
 
 class Subscribe(TimeStampedModel):
 
-	subscriber = models.ForeignKey(user_models.User, null=True, on_delete=models.SET_NULL)
-	school = models.ForeignKey(School, null=True, on_delete=models.SET_NULL, related_name="subscribes")
+	subscriber = models.ForeignKey(user_models.User,help_text="학교 구독자", null=True, on_delete=models.SET_NULL)
+	school = models.ForeignKey(School,help_text="학교", null=True, on_delete=models.SET_NULL, related_name="subscribes")
 
 	def __str__(self):
 		return 'User: {} - School Caption: {}'.format(self.subscriber.username, self.school.name)
@@ -51,8 +52,8 @@ class Member(TimeStampedModel):
         (1, '관리자'),
         (0, '일반 회원'),
     )
-    member  = models.ForeignKey(user_models.User, null=True, on_delete=models.SET_NULL)
-    school = models.ForeignKey(School, null=True, on_delete=models.SET_NULL, related_name="joins")
-    role = models.IntegerField(choices=ROLE_CHOICES, default=0)
+    member  = models.ForeignKey(user_models.User,help_text="학교 구성원", null=True, on_delete=models.SET_NULL)
+    school = models.ForeignKey(School,help_text="학교", null=True, on_delete=models.SET_NULL, related_name="joins")
+    role = models.IntegerField(_("학교 역할"),choices=ROLE_CHOICES, default=0)
 
 

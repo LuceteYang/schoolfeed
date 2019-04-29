@@ -1,5 +1,4 @@
 from rest_framework.views import APIView
-from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
@@ -15,50 +14,20 @@ from django.db.models.functions import Now
 
 from drf_yasg.utils import swagger_auto_schema
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
 
 # Create your views here.
-class Schools(GenericAPIView):
-    """
-        학교 리스트와 생성하는 API
-
-        ---
-        # 내용
-            - name : 학교 이름
-            - image : 학교 사진
-            - location : 학교 위치
-    """
+class Schools(APIView):
+    """Schools cbv classdoc"""
     serializer_class = serializers.SchoolsSerializer
-    parser_classes = (FormParser, MultiPartParser)
+    parser_classes = (MultiPartParser,)
+
 
     @swagger_auto_schema(
-        query_serializer=serializers.PageQuerySerializer
+        operation_description="학교를 생성하는 API",
+        responses={201: serializers.SchoolListSerializer(),400: '정보를 잘못 입력한 경우'},
+        tags=['schools'],
+        request_body=serializers.SchoolsSerializer()
     )
-    def get(self, request, format=None):
-
-        user = request.user
-
-        subscibed_schools_ids = models.Subscribe.objects.filter(subscriber=user.id).values('school')
-        school_list =  models.School.objects.filter(
-                                    id__in=subscibed_schools_ids,
-                                    deleted_at__isnull=True
-                                )
-
-        paginator = Paginator(school_list, 20) # Show 20 contacts per page
-
-        page = request.GET.get('page')
-        try:
-            schools = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            schools = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            schools = []
-        serializer = serializers.SchoolListSerializer(schools, many=True, context={'request': request})
-        return Response(data=serializer.data)
-
     def post(self, request, format=None):
 
         user = request.user  
@@ -86,20 +55,13 @@ class Schools(GenericAPIView):
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Search(APIView):
-    """
-        학교 검색
-        
-        ---
-        # 내용
-            - id : 학교 아이디
-            - name : 학교 이름
-            - image : 학교 이미지
-            - location : 학교 장소
-            - is_subscribed : 구독여부
-    """
-    serializer_class = serializers.SchoolsSerializer
+    """Search cbv classdoc"""
+
     @swagger_auto_schema(
-        query_serializer=serializers.SearchQuerySerializer
+        operation_description="학교 검색 API",
+        query_serializer=serializers.SearchQuerySerializer,
+        responses={200: serializers.SchoolListSerializer(many=True)},
+        tags=['schools']
     )
     def get(self, request, format=None):
         school_name = request.query_params.get('school_name',None)
@@ -113,19 +75,12 @@ class Search(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class SchoolDetail(GenericAPIView):
-    """
-        학교 정보를 조회, 수정, 삭제하는  API
-        
-        ---
-        # 내용
-            - profile_image : 프로필 이미지
-            - username : 유져 아이디
-            - name : 유져 이름
-    """
+class SchoolDetail(APIView):
+    """SchoolDetail cbv classdoc"""
     
     serializer_class = serializers.SchoolDetailSerializer
-    parser_classes = (FormParser, MultiPartParser)
+    parser_classes = (MultiPartParser,)
+
     def find_managing_school(self, school_id, user):
         try:
             school = models.School.objects.get(id=school_id, deleted_at__isnull=True)
@@ -134,6 +89,11 @@ class SchoolDetail(GenericAPIView):
         except (models.School.DoesNotExist, models.Member.DoesNotExist) as e:
             return None
 
+    @swagger_auto_schema(
+        operation_description="학교 페이지 정보를 불러오는 API",
+        responses={200: serializers.SchoolListSerializer()},
+        tags=['schools']
+    )
     def get(self, request, school_id, format=None):
 
         user = request.user
@@ -147,6 +107,12 @@ class SchoolDetail(GenericAPIView):
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        operation_description="학교 정보를 수정하는 API",
+        responses={200: serializers.SchoolListSerializer(),400: '정보를 잘못 입력한 경우'},
+        tags=['schools'],
+        request_body=serializers.SchoolDetailSerializer()
+    )
     def put(self, request, school_id, format=None):
 
         user = request.user
@@ -161,13 +127,17 @@ class SchoolDetail(GenericAPIView):
 
             serializer.save(school=school)
 
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
+            return Response(data=serializers.SchoolListSerializer(school).data, status=status.HTTP_200_OK)
 
         else:
 
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+    @swagger_auto_schema(
+        operation_description="학교를 삭제하는 API",
+        tags=['schools'],
+        responses={204: '학교 삭제 완료',400: '학교가 존재하지 않는 경우'}
+    )
     def delete(self, request, school_id, format=None):
 
         user = request.user
@@ -182,7 +152,13 @@ class SchoolDetail(GenericAPIView):
 
 
 class SubscribeSchool(APIView):
+    """SubscribeSchool cbv classdoc"""
 
+    @swagger_auto_schema(
+        operation_description="학교를 구독한 유저들을 불러오는 API",
+        responses={200: serializers.SchoolListSerializer()},
+        tags=['schools']
+    )
     def get(self, request, school_id, format=None):
 
         subscribes = models.Subscribe.objects.filter(school__id=school_id)
@@ -194,7 +170,12 @@ class SubscribeSchool(APIView):
         serializer = user_serializers.ListUserSerializer(users, many=True)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
-
+    
+    @swagger_auto_schema(
+        operation_description="유저가 학교를 구독하는 API",
+        tags=['schools'],
+        responses={201: '구독 완료',304: '이미 구독 했던 경우', 404: '학교를 찾을수 없음'}
+    )
     def post(self, request, school_id, format=None):
         user = request.user
 
@@ -220,7 +201,11 @@ class SubscribeSchool(APIView):
             return Response(status=status.HTTP_201_CREATED)
 
 class UnSubscribeSchool(APIView):
-
+    @swagger_auto_schema(
+        operation_description="유저가 학교를 구독 취소하는 API",
+        tags=['schools'],
+        responses={204: '구독 취소 완료',304: '구독하지 않았던 경우'}
+    )
     def delete(self, request, school_id, format=None):
 
         user = request.user
@@ -242,6 +227,7 @@ class UnSubscribeSchool(APIView):
 class ContentsSchool(APIView):
 
     @swagger_auto_schema(
+        operation_description="학교의 컨텐츠 리스트를 불러오는 API",
         query_serializer=serializers.ContentsQuerySerializer
     )
     def get(self, request, school_id, format=None):

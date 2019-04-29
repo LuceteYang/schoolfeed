@@ -3,20 +3,24 @@ from . import models
 from schoolfeed.contents import models as contents_models
 from schoolfeed.contents import serializers as contents_serializers
 
+from drf_yasg.utils import swagger_serializer_method
 
-class SchoolsSerializer(serializers.Serializer):
+class SchoolsSerializer(serializers.ModelSerializer):
 	id = serializers.IntegerField(read_only=True)
-	name = serializers.CharField(required=True)
-	image = serializers.FileField(required=False)
-	location = serializers.CharField(required=False)
+	class Meta:
+		model = models.School
+		fields = (
+			'id',
+			'name',
+			'image',
+			'location'
+		)
 
 class SchoolDetailSerializer(serializers.ModelSerializer):
-	contents = serializers.SerializerMethodField('paginated_contents')
-	name = serializers.CharField(required=False)
-	image = serializers.FileField(required=False)
-	location = serializers.CharField(required=False)
-	is_subscribed = serializers.SerializerMethodField()
-	is_manager = serializers.SerializerMethodField()
+
+	is_subscribed = serializers.SerializerMethodField(help_text="유저의 학교 구독 여부")
+	is_manager = serializers.SerializerMethodField(help_text="유저의 학교 매니져 여부")
+	contents = serializers.SerializerMethodField('paginated_contents',help_text="학교 게시글 리스트")
 
 	class Meta:
 		model = models.School
@@ -30,6 +34,8 @@ class SchoolDetailSerializer(serializers.ModelSerializer):
 			'subscriber_count',
 			'contents',
 		)
+
+	@swagger_serializer_method(serializer_or_field=serializers.ListField)
 	def paginated_contents(self, obj):
 		
 		contents = contents_models.Contents.objects.filter(
@@ -42,6 +48,8 @@ class SchoolDetailSerializer(serializers.ModelSerializer):
 		else:
 			serializer = contents_serializers.ContentsSerializer(contents,many=True)
 		return serializer.data
+
+	@swagger_serializer_method(serializer_or_field=serializers.BooleanField)
 	def get_is_subscribed(self, obj):
 		if 'request' in self.context:
 			request = self.context['request']
@@ -51,6 +59,8 @@ class SchoolDetailSerializer(serializers.ModelSerializer):
 			except models.Subscribe.DoesNotExist:
 				return False
 		return False
+
+	@swagger_serializer_method(serializer_or_field=serializers.BooleanField)
 	def get_is_manager(self, obj):
 		if 'request' in self.context:
 			request = self.context['request']
@@ -63,10 +73,7 @@ class SchoolDetailSerializer(serializers.ModelSerializer):
 
 class SchoolListSerializer(serializers.ModelSerializer):
 
-	name = serializers.CharField(required=False)
-	image = serializers.FileField(required=False)
-	location = serializers.CharField(required=False)
-	is_subscribed = serializers.SerializerMethodField()
+	is_subscribed = serializers.SerializerMethodField(help_text="유저의 학교 구독 여부")
 
 	class Meta:
 		model = models.School
@@ -77,6 +84,8 @@ class SchoolListSerializer(serializers.ModelSerializer):
 			'location',
 			'is_subscribed',
 		)
+		
+	@swagger_serializer_method(serializer_or_field=serializers.BooleanField)
 	def get_is_subscribed(self, obj):
 		if 'request' in self.context:
 			request = self.context['request']
@@ -88,10 +97,9 @@ class SchoolListSerializer(serializers.ModelSerializer):
 		return False
 
 class ContentsQuerySerializer(serializers.Serializer):
-	last_contents_id = serializers.IntegerField(help_text="this field is generated from a query_serializer", required=True)
+	last_contents_id = serializers.IntegerField(help_text="컨텐츠 리스트의 마지막 contents id 값 초기값 : 0", required=True)
 	
-class PageQuerySerializer(serializers.Serializer):
-	page = serializers.IntegerField(help_text="this field is generated from a query_serializer", required=True)
 
 class SearchQuerySerializer(serializers.Serializer):
-	school_name = serializers.CharField(help_text="this field is generated from a query_serializer", required=True)
+	school_name = serializers.CharField(help_text="검색하고자 하는 학교 이름", required=True)
+

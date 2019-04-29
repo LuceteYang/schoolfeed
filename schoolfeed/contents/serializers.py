@@ -3,11 +3,9 @@ from schoolfeed.users import serializers as users_serializers
 from . import models
 from schoolfeed.schools import models as schools_models
 
-class SchoolListSerializer(serializers.ModelSerializer):
+from drf_yasg.utils import swagger_serializer_method
 
-	name = serializers.CharField(required=False)
-	image = serializers.FileField(required=False)
-	location = serializers.CharField(required=False)
+class ContentsSchoolListSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = schools_models.School
@@ -20,9 +18,9 @@ class SchoolListSerializer(serializers.ModelSerializer):
 
 class ContentsSerializer(serializers.ModelSerializer):
 	
-	creator = users_serializers.ListUserSerializer(read_only=True)
-	school = SchoolListSerializer(read_only=True)
-	is_mine= serializers.SerializerMethodField()
+	creator = users_serializers.ListUserSerializer(read_only=True, help_text="컨텐츠 작성 유저")
+	school = ContentsSchoolListSerializer(read_only=True, help_text="컨텐츠 작성 학교")
+	is_mine= serializers.SerializerMethodField(help_text="컨텐츠 소유 여부")
 	class Meta:
 		model = models.Contents
 		fields = (
@@ -33,7 +31,9 @@ class ContentsSerializer(serializers.ModelSerializer):
 			'school',
 			'natural_time',
 			'is_mine'
-			) 
+			)
+
+	@swagger_serializer_method(serializer_or_field=serializers.BooleanField)
 	def get_is_mine(self, contents):
 		if 'request' in self.context:
 			
@@ -46,8 +46,8 @@ class ContentsSerializer(serializers.ModelSerializer):
 
 class InputContentsSerializer(serializers.ModelSerializer):
 	
-	text = serializers.CharField(required=True)
-	creator = users_serializers.ListUserSerializer(read_only=True)
+	text = serializers.CharField(help_text="컨텐츠 내용", required=True)
+	creator = users_serializers.ListUserSerializer(help_text="컨텐츠 작성자", read_only=True)
 
 	class Meta:
 		model = models.Contents
@@ -59,5 +59,3 @@ class InputContentsSerializer(serializers.ModelSerializer):
 			'school',
 			) 
 
-class ContentsQuerySerializer(serializers.Serializer):
-	last_contents_id = serializers.IntegerField(help_text="this field is generated from a query_serializer", required=True)

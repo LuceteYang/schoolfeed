@@ -124,7 +124,7 @@ class Container extends Component {
               axios.delete(`/api/contents/${contentsId}/`,axiosConfig)
                 .then(res => {
                   alert("삭제 되었습니다.")
-                  this.props.goToSchool(this.state.school)
+                  this.props.goToSchool(this.state.school.id)
                 })
           }
         },

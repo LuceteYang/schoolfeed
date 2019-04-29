@@ -30,7 +30,6 @@ const LoginForm = (props, context) => (
     <span className={formStyles.divider}></span>
     <span style={{display: props.errorExist ? 'block':'none'}} className={formStyles.errorMessage}>아이디와 비밀번호를 다시 확인해주세요!</span>
     <span className={formStyles.forgotLink}>
-      비밀번호를 잃어버리셨나요?
     </span>
   </div>
 );

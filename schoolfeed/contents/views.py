@@ -1,4 +1,4 @@
-from rest_framework.generics import GenericAPIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from . import models, serializers
@@ -9,41 +9,18 @@ from django.db.models.functions import Now
 from drf_yasg.utils import swagger_auto_schema
 
 # Create your views here.
-class Contents(GenericAPIView):
-	"""
-		구독한 학교 컨텐츠 리스트와 생성하는 API
+class Contents(APIView):
+	"""Contents cbv classdoc"""
 
-		---
-		# 내용
-			- id : 컨텐츠 아이디
-			- school : 학교
-			- creator : 컨텐츠 작성자
-			- main_image : 컨텐츠 사진
-			- text : 컨텐츠 내용
-	"""
 	serializer_class = serializers.InputContentsSerializer
 	parser_classes = (FormParser, MultiPartParser)
 
 	@swagger_auto_schema(
-		query_serializer=serializers.ContentsQuerySerializer
+		operation_description="컨텐츠를 생성하는 API",
+		responses={200: serializers.InputContentsSerializer(),400: '정보를 잘못 입력한 경우'},
+		tags=['contents'],
+		request_body=serializers.InputContentsSerializer()
 	)
-	def get(self, request, format=None):
-		try:
-			last_contents_id = int(request.GET.get('last_contents_id'))
-		except:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
-		user = request.user
-		subscibed_schools_ids = schools_models.Subscribe.objects.filter(subscriber=user.id).values('school')
-		field_value_pairs = [('school__in', subscibed_schools_ids),('deleted_at__isnull', True)]
-		if last_contents_id>0:
-			field_value_pairs.append(('id__lt', last_contents_id))
-		filter_options = {k:v for k,v in field_value_pairs}
-		contents =  models.Contents.objects.filter(
-									**filter_options
-								).order_by('-id')[:10]
-		serializer = serializers.ContentsSerializer(contents, many=True, context={'request': request})
-		return Response(data=serializer.data)
-
 	def post(self, request, format=None):
 
 		user = request.user
@@ -60,21 +37,13 @@ class Contents(GenericAPIView):
 		else:
 			return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class ContentsDetail(GenericAPIView):
-	"""
-		컨텐츠 정보를 조회, 수정, 삭제하는  API
-		
-		---
-		# 내용
-			- id : 컨텐츠 아이디
-			- school : 학교
-			- creator : 컨텐츠 작성자
-			- main_image : 컨텐츠 사진
-			- text : 컨텐츠 내용
-	"""
+class ContentsDetail(APIView):
+	pass
+	"""ContentsDetail cbv classdoc"""
 	
 	serializer_class = serializers.InputContentsSerializer
 	parser_classes = (FormParser, MultiPartParser)
+
 	def find_managing_school(self, school_id, user):
 		try:
 			school = schools_models.School.objects.get(id=school_id, deleted_at__isnull=True)
@@ -82,7 +51,12 @@ class ContentsDetail(GenericAPIView):
 			return school
 		except (schools_models.School.DoesNotExist, schools_models.Member.DoesNotExist) as e:
 			return None
-
+	
+	@swagger_auto_schema(
+		operation_description="컨텐츠 상세보기 API",
+		responses={200: serializers.ContentsSerializer(),400: '해당 컨텐츠가 없는 경우'},
+		tags=['contents']
+	)
 	def get(self, request, contents_id, format=None):
 
 		user = request.user
@@ -96,6 +70,12 @@ class ContentsDetail(GenericAPIView):
 
 		return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+	@swagger_auto_schema(
+		operation_description="컨텐츠 수정 API",
+		responses={200: serializers.InputContentsSerializer(),400: '정보를 잘못 입력한 경우'},
+		tags=['contents'],
+		request_body=serializers.InputContentsSerializer()
+	)
 	def put(self, request, contents_id, format=None):
 
 		user = request.user
@@ -111,12 +91,16 @@ class ContentsDetail(GenericAPIView):
 			if school is None:
 				return Response(status=status.HTTP_400_BAD_REQUEST)
 			serializer.save()
-			return Response({"id":contents_id, "school":contents.school.id}, status=status.HTTP_200_OK)
+			return Response(serializer.data, status=status.HTTP_200_OK)
 
 		else:
 			return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+	@swagger_auto_schema(
+		operation_description="컨텐츠 삭제 API",
+		responses={204: "삭제 성공"},
+		tags=['contents']
+	)
 	def delete(self, request, contents_id, format=None):
 
 		user = request.user

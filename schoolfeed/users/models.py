@@ -8,9 +8,9 @@ class User(AbstractUser):
 
     # First Name and Last Name do not cover name patterns
     # around the globe.
-    name = models.CharField(_("Name of User"), max_length=255)
-    profile_image = models.ImageField(null=True,blank=True)
-    email = models.EmailField(_('email address'),null=True)
+    name = models.CharField(_("유저의 이름"), max_length=30)
+    profile_image = models.ImageField(_("유저의 프로필 이미지"),null=True,blank=True)
+    email = models.EmailField(_("유저의 이메일"),null=True)
 
     def save(self, *args, **kwargs):
         if self.pk:

@@ -56,7 +56,7 @@ function setSchoolContents(schoolContents) {
 function getSubscribedSchool(page) {
   return (dispatch, getState) => {
     const { user: { token } } = getState();
-    fetch(`/api/schools/?page=${page}`, {
+    fetch(`/api/users/schools/?page=${page}`, {
       headers: {
         Authorization: `JWT ${token}`,
         "Content-Type": "application/json"

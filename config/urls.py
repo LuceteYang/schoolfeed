@@ -4,6 +4,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from rest_auth.views import (LoginView, PasswordChangeView, LogoutView)
+from django.views.decorators.csrf import csrf_exempt
 
 # drf_yasg
 from rest_framework import permissions
@@ -31,6 +33,9 @@ schema_view = get_schema_view(
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     # rest-auth login, registration
+    # path('api/rest-auth/login/', LoginView.as_view(), name='rest_login'),
+    # path('api/rest-auth/logout/', LogoutView.as_view(), name='rest_logout'),
+    # path('api/rest-auth/password/change/', csrf_exempt(PasswordChangeView.as_view()), name='rest_password_change'),
     path('api/rest-auth/', include(("rest_auth.urls","rest_framework"),namespace="rest_framework")),
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     # User management

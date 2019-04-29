@@ -96,7 +96,7 @@ function createAccount(username, password, email, name) {
 function getSubscribedFeed(last_contents_id) {
   return (dispatch, getState) => {
     const { user: { token } } = getState();
-    fetch(`/api/contents/?last_contents_id=${last_contents_id}`, {
+    fetch(`/api/users/contents/?last_contents_id=${last_contents_id}`, {
       headers: {
         Authorization: `JWT ${token}`,
         "Content-Type": "application/json"

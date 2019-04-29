@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import styles from "./styles.module.scss";
 import TimeStamp from "components/TimeStamp";
@@ -27,8 +27,9 @@ const FeedContents = (props, context) => {
 
       {props.main_image && <img src={props.main_image} alt={props.text} />}
 	  <div className={styles.meta}>
-      
-      {props.text}
+      {props.text.split('\n').map((item, key) => {
+        return <Fragment key={key}>{item}<br/></Fragment>
+      })}
       </div>
     </div>
   );
