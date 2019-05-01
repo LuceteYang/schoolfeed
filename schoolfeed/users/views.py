@@ -70,7 +70,7 @@ class UserSchool(APIView):
         school_list =  schools_models.School.objects.filter(
                                     id__in=subscibed_schools_ids,
                                     deleted_at__isnull=True
-                                )
+                                ).order_by('id')
 
         paginator = Paginator(school_list, 20) # Show 20 contacts per page
 

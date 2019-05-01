@@ -37,7 +37,7 @@ urlpatterns = [
     # path('api/rest-auth/logout/', LogoutView.as_view(), name='rest_logout'),
     # path('api/rest-auth/password/change/', csrf_exempt(PasswordChangeView.as_view()), name='rest_password_change'),
     path('api/rest-auth/', include(("rest_auth.urls","rest_framework"),namespace="rest_framework")),
-    path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('api/rest-auth/registration/', include(('rest_auth.registration.urls','registration'),namespace="registration")),
     # User management
     path('api/users/', include("schoolfeed.users.urls")),
     # School management

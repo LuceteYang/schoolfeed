@@ -5,6 +5,7 @@ from . import models
 @admin.register(models.School)
 class SchoolAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'name',
         'image',
         'location',
