@@ -40,7 +40,7 @@ class ContentsTestMixin(TestCase):
 		
 		resp = self.client.get('/api/contents/'+str(self.contents.id)+'/')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertTrue('id' in parseResponse)
 		self.assertTrue('creator' in parseResponse)
 		self.assertTrue('main_image' in parseResponse)
@@ -54,7 +54,7 @@ class ContentsTestMixin(TestCase):
 
 		resp = self.client.get('/api/contents/'+str(self.contents.id)+'/')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertEqual(parseResponse.get('text'), '초기 컨텐츠입니다.')
 
 		response = self.client.put(
@@ -63,7 +63,7 @@ class ContentsTestMixin(TestCase):
 			format='multipart'
 		)
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(response.content)
+		parseResponse = json.loads(response.content.decode('utf-8'))
 		self.assertTrue('id' in parseResponse)
 		self.assertTrue('creator' in parseResponse)
 		self.assertTrue('main_image' in parseResponse)

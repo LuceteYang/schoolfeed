@@ -26,3 +26,11 @@ Test Case 작성 : [https://github.com/LuceteYang/schoolfeed/commit/4f943b02f3d4
 ## Reference
 #### Swagger Example 참고
 https://django-rest-swagger.readthedocs.io/en/latest/
+
+## 이슈 및 해결
+1. test파일  TypeError: the JSON object must be str, not 'bytes'
+```python
+parseResponse = json.loads(response.content)
+# =>
+parseResponse = json.loads(response.content.decode('utf-8'))
+```

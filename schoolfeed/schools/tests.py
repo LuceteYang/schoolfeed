@@ -34,7 +34,7 @@ class SchoolsTestMixin(TestCase):
 	def test_search_school(self):
 		resp = self.client.get('/api/schools/search/?school_name=금호')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertEqual(len(parseResponse),1)
 		self.assertEqual(parseResponse[0].get('name'),'금호고등학교')
 
@@ -42,7 +42,7 @@ class SchoolsTestMixin(TestCase):
 		school = School.objects.first()
 		resp = self.client.get('/api/schools/'+str(school.id)+'/')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertTrue('id' in parseResponse)
 		self.assertTrue('name' in parseResponse)
 		self.assertTrue('image' in parseResponse)
@@ -55,7 +55,7 @@ class SchoolsTestMixin(TestCase):
 
 		resp = self.client.get('/api/schools/'+str(self.school.id)+'/')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertTrue('id' in parseResponse)
 		self.assertTrue('name' in parseResponse)
 		self.assertTrue('image' in parseResponse)
@@ -72,7 +72,7 @@ class SchoolsTestMixin(TestCase):
 			format='multipart'
 		)
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(response.content)
+		parseResponse = json.loads(response.content.decode('utf-8'))
 		self.assertTrue('id' in parseResponse)
 		self.assertTrue('name' in parseResponse)
 		self.assertTrue('image' in parseResponse)
@@ -95,7 +95,7 @@ class SchoolsTestMixin(TestCase):
 	def test_school_contents(self):
 		resp = self.client.get('/api/schools/'+str(self.school.id)+'/contents/?last_contents_id=0', format='json')		
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertEqual(len(parseResponse),0)
 
 	def test_school_subscribes(self):
@@ -104,7 +104,7 @@ class SchoolsTestMixin(TestCase):
 
 		resp = self.client.get('/api/schools/'+str(self.school.id)+'/subscribes/')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertEqual(len(parseResponse),1)
 
 		resp = self.client.delete('/api/schools/'+str(self.school.id)+'/unsubscribes/')
@@ -112,5 +112,5 @@ class SchoolsTestMixin(TestCase):
 
 		resp = self.client.get('/api/schools/'+str(self.school.id)+'/subscribes/')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertEqual(len(parseResponse),0)

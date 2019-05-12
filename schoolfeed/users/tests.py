@@ -26,7 +26,7 @@ class UsersTestMixin(TestCase):
 	def test_get_users(self):
 		resp = self.client.get('/api/users/', format='json')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertTrue('profile_image' in parseResponse)
 		self.assertTrue('name' in parseResponse)
 		self.assertTrue('email' in parseResponse)
@@ -34,22 +34,22 @@ class UsersTestMixin(TestCase):
 	def test_put_users(self):
 		resp = self.client.get('/api/users/', format='json')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertEqual(parseResponse['name'],'박상환')
 
 		resp = self.client.put('/api/users/', {'name':'sanghwan'})
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertEqual('sanghwan',parseResponse['name'])
 
 	def test_get_user_schools(self):
 		resp = self.client.get('/api/users/schools/?page=1', format='json')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertEqual(len(parseResponse),0)
 
 	def test_get_user_contents(self):
 		resp = self.client.get('/api/users/contents/?last_contents_id=0', format='json')		
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-		parseResponse = json.loads(resp.content)
+		parseResponse = json.loads(resp.content.decode('utf-8'))
 		self.assertEqual(len(parseResponse),0)
