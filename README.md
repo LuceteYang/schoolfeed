@@ -29,8 +29,15 @@ https://django-rest-swagger.readthedocs.io/en/latest/
 
 ## 이슈 및 해결
 1. test파일  TypeError: the JSON object must be str, not 'bytes'
-```python
-parseResponse = json.loads(response.content)
-# =>
-parseResponse = json.loads(response.content.decode('utf-8'))
+https://stackoverflow.com/questions/42683478/typeerror-the-json-object-must-be-str-not-bytes/42683509
+``` diff
+-parseResponse = json.loads(response.content)
++parseResponse = json.loads(response.content.decode('utf-8'))
+```
+2. 로그인이나 에러메시지 커스텀 / naturaltime  
+LANGUAGE_CODE 바꿔서 해결
+https://stackoverflow.com/questions/9074957/django-localization-how-to-use-a-non-english-language-as-translate-from-langu
+``` diff
+-LANGUAGE_CODE = "en-us"
++LANGUAGE_CODE = "ko-kr"
 ```
