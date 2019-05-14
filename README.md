@@ -41,3 +41,4 @@ https://stackoverflow.com/questions/9074957/django-localization-how-to-use-a-non
 -LANGUAGE_CODE = "en-us"
 +LANGUAGE_CODE = "ko-kr"
 ```
+3. 쿼리 로깅 확인
