@@ -38,7 +38,6 @@ class Contents(APIView):
 			return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ContentsDetail(APIView):
-	pass
 	"""ContentsDetail cbv classdoc"""
 	
 	serializer_class = serializers.InputContentsSerializer
@@ -62,7 +61,7 @@ class ContentsDetail(APIView):
 		user = request.user
 
 		try:
-			contents = models.Contents.objects.get(id=contents_id, deleted_at__isnull=True)
+			contents = models.Contents.objects.select_related('school','creator').get(id=contents_id, deleted_at__isnull=True)
 		except models.Contents.DoesNotExist:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 

@@ -42,3 +42,7 @@ https://stackoverflow.com/questions/9074957/django-localization-how-to-use-a-non
 +LANGUAGE_CODE = "ko-kr"
 ```
 3. 쿼리 로깅 확인
+
+4. 쿼리셋 최적화 - 중복 DB쿼리 최소화 (select_related, prefetch_related, Django debug toolbar 활용)
+https://wayhome25.github.io/django/2017/06/20/selected_related_prefetch_related/
+https://wayhome25.github.io/django/2017/06/25/django-ajax-like-button/

@@ -38,7 +38,8 @@ class ContentsSerializer(serializers.ModelSerializer):
 		if 'request' in self.context:
 			
 			request =  self.context['request']
-			if contents.creator.id == request.user.id:
+			# foreignKey일 경우 .id로 하면 쿼리로 한번더 검색
+			if contents.creator_id == request.user.id:
 				return True
 			else:
 				return False

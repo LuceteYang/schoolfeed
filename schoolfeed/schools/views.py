@@ -66,10 +66,9 @@ class Search(APIView):
     def get(self, request, format=None):
         school_name = request.query_params.get('school_name',None)
         if school_name is None:
-            print(school_name)
             schools = []
         else:    
-            schools = models.School.objects.filter(name__contains=school_name, deleted_at__isnull=True)
+            schools = models.School.objects.prefetch_related('subscribe_user_set').filter(name__contains=school_name, deleted_at__isnull=True)
 
         serializer = serializers.SchoolListSerializer(schools, many=True, context={'request': request})
         return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -99,7 +98,7 @@ class SchoolDetail(APIView):
         user = request.user
 
         try:
-            school = models.School.objects.get(id=school_id, deleted_at__isnull=True)
+            school = models.School.objects.prefetch_related('member_user_set','subscribe_user_set').get(id=school_id, deleted_at__isnull=True)
         except models.School.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -241,7 +240,7 @@ class ContentsSchool(APIView):
         filter_options = {k:v for k,v in field_value_pairs if v}
         contents =  contents_models.Contents.objects.filter(
                                     **filter_options
-                                ).order_by('-id')[:10]
+                                ).select_related('creator','school').order_by('-id')[:10]
         serializer = contents_serializers.ContentsSerializer(contents, many=True, context={'request': request})
         return Response(data=serializer.data)
 

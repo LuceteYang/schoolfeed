@@ -38,7 +38,7 @@ class SchoolDetailSerializer(serializers.ModelSerializer):
 	@swagger_serializer_method(serializer_or_field=serializers.ListField)
 	def paginated_contents(self, obj):
 		
-		contents = contents_models.Contents.objects.filter(
+		contents = contents_models.Contents.objects.prefetch_related('school','creator').filter(
 									school=obj.id,
 									deleted_at__isnull=True
 								).order_by('-id')[:10]
@@ -53,10 +53,9 @@ class SchoolDetailSerializer(serializers.ModelSerializer):
 	def get_is_subscribed(self, obj):
 		if 'request' in self.context:
 			request = self.context['request']
-			try:
-				models.Subscribe.objects.get(subscriber__id=request.user.id, school__id=obj.id)
+			if request.user in obj.subscribe_user_set.all():
 				return True
-			except models.Subscribe.DoesNotExist:
+			else:
 				return False
 		return False
 
@@ -64,10 +63,9 @@ class SchoolDetailSerializer(serializers.ModelSerializer):
 	def get_is_manager(self, obj):
 		if 'request' in self.context:
 			request = self.context['request']
-			try:
-				models.Member.objects.get(member__id=request.user.id, school__id=obj.id, role__gte=0)
+			if request.user in obj.member_user_set.filter(member__role__gte=0):
 				return True
-			except models.Member.DoesNotExist:
+			else:
 				return False
 		return False
 
@@ -82,20 +80,20 @@ class SchoolListSerializer(serializers.ModelSerializer):
 			'name',
 			'image',
 			'location',
-			'is_subscribed',
+			'is_subscribed'
 		)
+		
 		
 	@swagger_serializer_method(serializer_or_field=serializers.BooleanField)
 	def get_is_subscribed(self, obj):
 		if 'request' in self.context:
 			request = self.context['request']
-			try:
-				models.Subscribe.objects.get(subscriber__id=request.user.id, school__id=obj.id)
+			if request.user in obj.subscribe_user_set.all():
 				return True
-			except models.Subscribe.DoesNotExist:
+			else:
 				return False
 		return False
-
+		
 class ContentsQuerySerializer(serializers.Serializer):
 	last_contents_id = serializers.IntegerField(help_text="컨텐츠 리스트의 마지막 contents id 값 초기값 : 0", required=True)
 	

@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from schoolfeed.users import models as user_models
+from django.conf import settings
 
 class TimeStampedModel(models.Model):
 
@@ -20,10 +21,17 @@ class School(TimeStampedModel):
     location = models.CharField(_("학교 위치"), max_length=140, null=True)
     deleted_at = models.DateTimeField(_("학교 삭제 시간"),null=True)
     creator = models.ForeignKey(user_models.User,help_text="학교 생성자", null=True, on_delete=models.SET_NULL, related_name="school")
-    
+    subscribe_user_set = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                        blank=True,
+                                        related_name='subscribe_user_set',
+                                        through='Subscribe')
+    member_user_set = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                        blank=True,
+                                        related_name='member_user_set',
+                                        through='Member')
     @property
     def subscriber_count(self):
-        return self.subscribes.all().count()
+        return self.subscribe_user_set.count()
 
     def save(self, *args, **kwargs):
         if self.pk:

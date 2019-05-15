@@ -67,10 +67,10 @@ class UserSchool(APIView):
         user = request.user
 
         subscibed_schools_ids = schools_models.Subscribe.objects.filter(subscriber=user.id).values('school')
-        school_list =  schools_models.School.objects.filter(
+        school_list =  schools_models.School.objects.annotate().filter(
                                     id__in=subscibed_schools_ids,
                                     deleted_at__isnull=True
-                                ).order_by('id')
+                                ).prefetch_related('subscribe_user_set').order_by('id')
 
         paginator = Paginator(school_list, 20) # Show 20 contacts per page
 
@@ -104,9 +104,10 @@ class UserSchoolContents(APIView):
         if last_contents_id>0:
             field_value_pairs.append(('id__lt', last_contents_id))
         filter_options = {k:v for k,v in field_value_pairs}
+        # related를 하면 nestedSerializer할 경우 각각 쿼리를 날리지 않음
         contents =  contents_models.Contents.objects.filter(
                                     **filter_options
-                                ).order_by('-id')[:10]
+                                ).select_related('school','creator').order_by('-id')[:10]
         serializer = contents_serializers.ContentsSerializer(contents, many=True, context={'request': request})
         return Response(data=serializer.data)
 
