@@ -32,6 +32,14 @@ const ProfileForm = (props, context) => (
         name="email"
       />
       <input
+        type="password"
+        placeholder="비밀번호"
+        className={styles.textInput}
+        value={props.password}
+        onChange={props.handleInputChange}
+        name="password"
+      />
+      <input
         type="submit"
         value="수정하기"
         className={styles.button}
@@ -42,13 +50,13 @@ const ProfileForm = (props, context) => (
 );
 
 ProfileForm.propTypes = {
-  profile_image: PropTypes.string.isRequired,
+  profile_image: PropTypes.string,
   editShow: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
-  // password: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
   errorMessage: PropTypes.string
 };
 

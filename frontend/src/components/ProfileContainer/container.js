@@ -8,7 +8,7 @@ class Container extends Component {
     	"email": "",
     	"profile_image":"",
     	"name":"",
-	    // "password":"",
+	    "password":"",
 	    "editShow":false
 	};
   static propTypes = {
@@ -38,12 +38,12 @@ class Container extends Component {
   	_handleSubmit = event => {
 	    const { password, email, name } = this.state;
 	    event.preventDefault();
-	    // if(password && password.length<8){
-	    //   this.setState({
-	    //     errorMessage: "비밀번호는 8자 이상 12자 이하로 입력해 주세요."
-	    //   });
-	    //   return
-	    // }
+	    if(password && password.length<8){
+	      this.setState({
+	        errorMessage: "비밀번호는 8자 이상 12자 이하로 입력해 주세요."
+	      });
+	      return
+	    }
 	    if(!name){
 	      return this.setState({
 	        errorMessage: "이름을 입력해주세요."
@@ -88,21 +88,23 @@ class Container extends Component {
 	      })
 	    })
 	}
-	// _requestChangePassword = () =>{
- //  		axios.post('/rest-auth/password/change/',
-	// 	{
-	// 		new_password1: this.state.password,
-	// 		new_password2: this.state.password
-	// 	},
- //      	{
-	//         headers: { Authorization: `JWT ${this.props.token}` }
- //      	})
-	//     .then(info => {
-	//       this.setState({ 
-	//       	"password":""
-	//       })
-	//     })
-	// }
+	_requestChangePassword = () =>{
+		axios.defaults.xsrfCookieName = 'csrftoken'
+		axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+  		axios.post('/api/rest-auth/password/change/',
+		{
+			new_password1: this.state.password,
+			new_password2: this.state.password
+		},
+      	{
+	        headers: { Authorization: `JWT ${this.props.token}`}
+      	})
+	    .then(info => {
+	      this.setState({ 
+	      	"password":""
+	      })
+	    })
+	}
 	_showEditView = () =>{
       this.setState({ 
       	"editShow":true

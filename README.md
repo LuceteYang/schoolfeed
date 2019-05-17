@@ -46,3 +46,7 @@ https://stackoverflow.com/questions/9074957/django-localization-how-to-use-a-non
 4. 쿼리셋 최적화 - 중복 DB쿼리 최소화 (select_related, prefetch_related, Django debug toolbar 활용)
 https://wayhome25.github.io/django/2017/06/20/selected_related_prefetch_related/
 https://wayhome25.github.io/django/2017/06/25/django-ajax-like-button/
+
+5. 비밀번호 변경시 csrf에러
+csrf 쿠키를 가져와서 Header로 전송하여 해결
+https://docs.djangoproject.com/en/1.10/ref/csrf/#ajax
