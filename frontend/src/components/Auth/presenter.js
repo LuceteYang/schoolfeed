@@ -20,6 +20,10 @@ const Auth = (props, context) => (
         {props.action === "signup" && <SignupForm />}
       </div>
 	  <div className={styles.whiteBox}>
+        <p>
+          테스트 아이디 : test / 비밀번호 : test2019
+        </p>
+        <br/>
         {props.action === "signup" && (
           <p>
             아이디가 있으신가?{" "}

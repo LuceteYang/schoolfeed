@@ -67,7 +67,7 @@ class UserSchool(APIView):
         user = request.user
 
         subscibed_schools_ids = schools_models.Subscribe.objects.filter(subscriber=user.id).values('school')
-        school_list =  schools_models.School.objects.annotate().filter(
+        school_list =  schools_models.School.objects.filter(
                                     id__in=subscibed_schools_ids,
                                     deleted_at__isnull=True
                                 ).prefetch_related('subscribe_user_set').order_by('id')
