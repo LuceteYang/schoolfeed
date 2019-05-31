@@ -43,3 +43,15 @@ https://wayhome25.github.io/django/2017/06/25/django-ajax-like-button/
 5. 비밀번호 변경시 csrf에러
 csrf 쿠키를 가져와서 Header로 전송하여 해결
 https://docs.djangoproject.com/en/1.10/ref/csrf/#ajax
+
+6. flake, isort 적용
+```zsh
+pip install flake8
+flake8 test.py
+```
+https://tech.songyunseop.com/post/2017/05/lint-with-flake8/
+```zsh
+pip install isort
+isort **/*.py
+```
+https://github.com/timothycrosley/isort

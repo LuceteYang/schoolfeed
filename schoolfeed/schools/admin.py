@@ -1,5 +1,7 @@
 from django.contrib import admin
+
 from . import models
+
 
 # Register your models here.
 @admin.register(models.School)
@@ -13,6 +15,7 @@ class SchoolAdmin(admin.ModelAdmin):
         'deleted_at',
     )
 
+
 @admin.register(models.Subscribe)
 class SubscribeAdmin(admin.ModelAdmin):
     list_display = (
@@ -20,14 +23,13 @@ class SubscribeAdmin(admin.ModelAdmin):
         'school',
     )
 
+
 @admin.register(models.Member)
 class MemberAdmin(admin.ModelAdmin):
-	list_display = (
+    list_display = (
         'id',
-		'member',
-		'school',
-		'school',
-		'role'
-	)
-
-
+        'member',
+        'school',
+        'school',
+        'role'
+    )

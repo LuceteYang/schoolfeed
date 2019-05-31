@@ -164,7 +164,7 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
     str(APPS_DIR.path("static")),
-    str(ROOT_DIR.path('frontend','build','static')),
+    str(ROOT_DIR.path('frontend', 'build', 'static')),
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
@@ -293,22 +293,21 @@ JWT_AUTH = {
     'JWT_VERIFY_EXPIRATION': False
 }
 
-# rest auth custom serializers 
+# rest auth custom serializers
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'schoolfeed.users.serializers.SignUpSerializer'
 }
 REST_AUTH_SERIALIZERS = {
-    'LOGIN_SERIALIZER':'schoolfeed.users.serializers.CustomLoginSerializer',
+    'LOGIN_SERIALIZER': 'schoolfeed.users.serializers.CustomLoginSerializer',
     'USER_DETAILS_SERIALIZER': 'schoolfeed.users.serializers.UserProfileSerializer'
 }
 # swagger security apikey header parameter
 SWAGGER_SETTINGS = {
-   'SECURITY_DEFINITIONS': {
+    'SECURITY_DEFINITIONS': {
         'api_key': {
             'type': 'apiKey',
             'in': 'header',
             'name': 'Authorization'
         }
-   }
+    }
 }
-
