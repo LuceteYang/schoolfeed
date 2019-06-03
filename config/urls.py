@@ -38,8 +38,6 @@ urlpatterns = [
     path('api/users/', include("schoolfeed.users.urls")),
     # School management
     path('api/schools/', include("schoolfeed.schools.urls")),
-    # Content management
-    path('api/contents/', include("schoolfeed.contents.urls")),
 
     # drf_yasg Swagger
     path('swagger<str:format>', schema_view.without_ui(cache_timeout=0), name='schema-json'),

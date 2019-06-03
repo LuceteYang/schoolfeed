@@ -1,12 +1,10 @@
 from django.db.models.functions import Now
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from schoolfeed.contents import models as contents_models
-from schoolfeed.contents import serializers as contents_serializers
 from schoolfeed.users import models as user_models
 from schoolfeed.users import serializers as user_serializers
 
@@ -87,7 +85,7 @@ class SchoolDetail(APIView):
 
     @swagger_auto_schema(
         operation_description="학교 페이지 정보를 불러오는 API",
-        responses={200: serializers.SchoolListSerializer()},
+        responses={200: serializers.SchoolListSerializer(), 404: '학교가 존재하지 않는 경우'},
         tags=['schools']
     )
     def get(self, request, school_id, format=None):
@@ -220,6 +218,9 @@ class UnSubscribeSchool(APIView):
 
 class ContentsSchool(APIView):
 
+    serializer_class = serializers.InputContentsSerializer
+    parser_classes = (FormParser, MultiPartParser)
+
     @swagger_auto_schema(
         operation_description="학교의 컨텐츠 리스트를 불러오는 API",
         query_serializer=serializers.ContentsQuerySerializer
@@ -233,8 +234,105 @@ class ContentsSchool(APIView):
         if last_contents_id > 0:
             field_value_pairs.append(('id__lt', last_contents_id))
         filter_options = {k: v for k, v in field_value_pairs if v}
-        contents = contents_models.Contents.objects.filter(
+        contents = models.Contents.objects.filter(
             **filter_options
         ).select_related('creator', 'school').order_by('-id')[:10]
-        serializer = contents_serializers.ContentsSerializer(contents, many=True, context={'request': request})
+        serializer = serializers.ContentsSerializer(contents, many=True, context={'request': request})
         return Response(data=serializer.data)
+
+    @swagger_auto_schema(
+        operation_description="컨텐츠를 생성하는 API",
+        responses={200: serializers.InputContentsSerializer(), 400: '정보를 잘못 입력한 경우'},
+        tags=['schools'],
+        request_body=serializers.InputContentsSerializer()
+    )
+    def post(self, request, school_id, format=None):
+
+        user = request.user
+
+        serializer = serializers.InputContentsSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                member = models.Member.objects.select_related('school').get(school__id=school_id, member=user, role__gte=0, school__deleted_at__isnull=True)
+            except (models.Member.DoesNotExist):
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(creator=user, school=member.school)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ContentsDetail(APIView):
+    """ContentsDetail cbv classdoc"""
+
+    serializer_class = serializers.InputContentsSerializer
+    parser_classes = (FormParser, MultiPartParser)
+
+    def find_managing_school(self, school_id, user):
+        try:
+            member = models.Member.objects.select_related('school').get(school__id=school_id, member=user, role__gte=0, school__deleted_at__isnull=True)
+            return member
+        except (models.Member.DoesNotExist):
+            return None
+
+    @swagger_auto_schema(
+        operation_description="컨텐츠 상세보기 API",
+        responses={200: serializers.ContentsSerializer(), 400: '해당 컨텐츠가 없는 경우'},
+        tags=['schools']
+    )
+    def get(self, request, school_id, contents_id, format=None):
+
+        try:
+            contents = models.Contents.objects.select_related('school', 'creator').get(id=contents_id, deleted_at__isnull=True)
+        except models.Contents.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = serializers.ContentsSerializer(contents, context={'request': request})
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        operation_description="컨텐츠 수정 API",
+        responses={200: serializers.InputContentsSerializer(), 400: '정보를 잘못 입력한 경우'},
+        tags=['schools'],
+        request_body=serializers.InputContentsSerializer()
+    )
+    def put(self, request, school_id, contents_id, format=None):
+
+        user = request.user
+        try:
+            contents = models.Contents.objects.select_related('school', 'creator').get(id=contents_id, deleted_at__isnull=True)
+        except models.Contents.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = serializers.InputContentsSerializer(contents, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            member = self.find_managing_school(school_id, user)
+            if member is None:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(school=member.school)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(
+        operation_description="컨텐츠 삭제 API",
+        responses={204: "삭제 성공"},
+        tags=['schools']
+    )
+    def delete(self, request, school_id, contents_id, format=None):
+
+        user = request.user
+        try:
+            contents = models.Contents.objects.get(id=contents_id, deleted_at__isnull=True)
+        except models.Contents.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        school = self.find_managing_school(school_id, user)
+        if school is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        contents.deleted_at = Now()
+        contents.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)

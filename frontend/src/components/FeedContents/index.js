@@ -21,7 +21,7 @@ const FeedContents = (props, context) => {
     			<span className={styles.location}><Link to={`/school/${props.school.id}`}>{props.school.name}</Link>{'\u00A0'}{'\u00A0'}{'\u00A0'}<TimeStamp time={props.natural_time} /></span>
         </div>
         <div className={styles.editIconArea} >
-          {props.is_mine && (<Link to={`/contents/${props.id}`}>
+          {props.is_mine && (<Link to={`/school/${props.school.id}/contents/${props.id}`}>
           <Ionicon className={styles.editIcon} icon="ios-create-outline" fontSize="28px" color="black" />
           </Link>)}
         </div>

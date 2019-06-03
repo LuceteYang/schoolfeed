@@ -95,7 +95,6 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "schoolfeed.users.apps.UsersAppConfig",
     "schoolfeed.schools.apps.SchoolsConfig",
-    "schoolfeed.contents.apps.ContentsConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

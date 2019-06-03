@@ -6,8 +6,6 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from schoolfeed.contents import models as contents_models
-from schoolfeed.contents import serializers as contents_serializers
 from schoolfeed.schools import models as schools_models
 from schoolfeed.schools import serializers as schools_serializers
 
@@ -88,7 +86,7 @@ class UserSchoolContents(APIView):
     @swagger_auto_schema(
         operation_description="유저가 구독한 학교의 컨텐츠를 불러오는 API",
         query_serializer=serializers.ContentsQuerySerializer,
-        responses={200: contents_serializers.ContentsSerializer(many=True)},
+        responses={200: schools_serializers.ContentsSerializer(many=True)},
         tags=['users']
     )
     def get(self, request, format=None):
@@ -103,8 +101,8 @@ class UserSchoolContents(APIView):
             field_value_pairs.append(('id__lt', last_contents_id))
         filter_options = {k: v for k, v in field_value_pairs}
         # related를 하면 nestedSerializer할 경우 각각 쿼리를 날리지 않음
-        contents = contents_models.Contents.objects.filter(
+        contents = schools_models.Contents.objects.filter(
             **filter_options
         ).select_related('school', 'creator').order_by('-id')[:10]
-        serializer = contents_serializers.ContentsSerializer(contents, many=True, context={'request': request})
+        serializer = schools_serializers.ContentsSerializer(contents, many=True, context={'request': request})
         return Response(data=serializer.data)

@@ -19,14 +19,9 @@ class Container extends Component {
     goToHome: PropTypes.func.isRequired,
   };
   componentDidMount() {
-      if(this.props.location.pathname.match(/^\/school\/(\d+)\/contents/)){
-        // 컨텐츠 생성
-        this.setState({
-          action: "new"
-        });
-      }else if (this.props.location.pathname.match(/^\/contents\/(\d+)/)){
+      if (this.props.location.pathname.match(/^\/school\/(\d+)\/contents\/(\d+)/)){
         // 컨텐츠 수정
-        fetch(`/api/contents/${this.props.match.params.contentsId}/`, {
+        fetch(`/api/schools/${this.props.match.params.schoolId}/contents/${this.props.match.params.contentsId}/`, {
           headers: {
             Authorization: `JWT ${this.props.token}`,
             "Content-Type": "application/json"
@@ -45,6 +40,11 @@ class Container extends Component {
             action:"edit"
           });
         })
+      }else if(this.props.location.pathname.match(/^\/school\/(\d+)\/contents/)){
+        // 컨텐츠 생성
+        this.setState({
+          action: "new"
+        });
       }else{
         // 예외 경우
         return this.props.goToHome()
@@ -79,12 +79,11 @@ class Container extends Component {
       let method
       let message
       if(action==="new"){
-        url = `/api/contents/`
+        url = `/api/schools/${params.schoolId}/contents/`
         method = "POST"
         message = "생성"
-        formData.append('school',params.schoolId)
       }else if(action==="edit"){
-        url = `/api/contents/${params.contentsId}/`
+        url = `/api/schools/${params.schoolId}/contents/${params.contentsId}/`
         method = "PUT"
         message = "수정"
       }
@@ -121,7 +120,7 @@ class Container extends Component {
                     Authorization: `JWT ${token}`
                 }
               };
-              axios.delete(`/api/contents/${contentsId}/`,axiosConfig)
+              axios.delete(`/api/schools/${this.state.school.id}/contents/${contentsId}/`,axiosConfig)
                 .then(res => {
                   alert("삭제 되었습니다.")
                   this.props.goToSchool(this.state.school.id)

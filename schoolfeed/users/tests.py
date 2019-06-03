@@ -12,7 +12,7 @@ class UsersTestCase(TestCase):
         url = reverse('registration:rest_register')
         registrationResp = self.client.post(url, {'username': 'sanghwan', 'email': 'jae6120@naver.com', 'password2': 'chevyspassword', 'password1': 'chevyspassword', 'name': '박상환'})
         self.assertEqual(registrationResp.status_code, status.HTTP_201_CREATED)
-        url = reverse('rest_framework: rest_login')
+        url = reverse('rest_framework:rest_login')
         resp = self.client.post(url, {'username': 'sanghwan', 'password': 'chevyspassword'}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertTrue('token' in resp.data)
