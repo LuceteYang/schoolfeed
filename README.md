@@ -1,10 +1,6 @@
 # schoolfeed
 
 
-## Site
-
-Link: [https://schoolfeed.societyang.xyz](https://schoolfeed.societyang.xyz)
-
 ## Swagger
 
 Link: [https://schoolfeed.societyang.xyz/swagger/](https://schoolfeed.societyang.xyz/swagger/)
